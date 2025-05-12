@@ -1,14 +1,17 @@
 package me.shinsunyoung.springbootdeveloper.hotdeal.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+import lombok.NoArgsConstructor;
 import me.shinsunyoung.springbootdeveloper.hotdeal.entity.HotDeal;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class HotDealDto {
     private String title;
     private String shopName;

@@ -1,12 +1,10 @@
 package me.shinsunyoung.springbootdeveloper.hotdeal.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class ImageDto {
     private String fileUrl;
 
