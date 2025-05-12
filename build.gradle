@@ -33,6 +33,9 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
+    implementation platform('software.amazon.awssdk:bom:2.25.20')
+    implementation 'software.amazon.awssdk:s3'
+    implementation 'com.amazonaws:aws-java-sdk-s3:1.12.695'
 }
 
 jar {
