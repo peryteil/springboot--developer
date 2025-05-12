@@ -30,6 +30,7 @@ public class Product {
     @OneToMany(mappedBy = "product" , cascade = CascadeType.ALL)
     private List<Image> images = new ArrayList<>();
 
+
     public void addImage(Image image) {
         if (image == null) {
             images = new ArrayList<>();

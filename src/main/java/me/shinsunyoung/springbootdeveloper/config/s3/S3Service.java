@@ -40,6 +40,7 @@ public class S3Service {
         }
         return amazonS3Client.getUrl(bucketName, uniqueFileName).toString();
     }
+//    hotDeal파일
     @Transactional
     public void pacthFile(Long id, List<MultipartFile> files) {
         HotDeal hotDeal = hotDealRepository.findById(id).orElse(null);
@@ -66,4 +67,6 @@ public class S3Service {
     private String extractKeyFromUrl(String fileUrl) {
         return fileUrl.substring(fileUrl.lastIndexOf("/") + 1);
     }
+
+
 }

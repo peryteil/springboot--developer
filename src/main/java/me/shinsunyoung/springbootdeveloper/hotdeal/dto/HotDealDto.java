@@ -31,6 +31,8 @@ public class HotDealDto {
         this.shopLink = hotDeal.getShopLink();
         this.price = hotDeal.getPrice();
         this.content = hotDeal.getContent();
+        this.createdAt = hotDeal.getCreatedAt();
+        this.updatedAt = hotDeal.getUpdatedAt();
         this.imageDtos = hotDeal.getImages().stream()
                 .map(img -> new ImageDto(img.getFileUrl()))
                 .toList();
