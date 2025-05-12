@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.util.List;
 @Service
 public class HotDealService {
@@ -28,6 +29,10 @@ public class HotDealService {
         hotDeal.setShopName(dto.getShopName());
         hotDeal.setShopLink(dto.getShopLink());
         hotDeal.setPrice(dto.getPrice());
+        hotDeal.setCreatedAt(LocalDateTime.now());
+        hotDeal.setLikeCount(0);
+        hotDeal.setViewCount(0);
+
         if (files != null && !files.isEmpty()) {
             for (MultipartFile file : files) {
                 String fileUrl = s3Service.updateFiler(file);
@@ -46,5 +51,36 @@ public class HotDealService {
     public List<HotDealDto> findAllHotDeal() {
         return hotDealRepository.findAll().stream()
                 .map(HotDealDto::new).toList();
+    }
+    @Transactional
+    public void updateHotDeal(Long id, HotDealDto dto, List<MultipartFile> files) {
+        HotDeal hotDeal = hotDealRepository.findById(id).orElse(null);
+
+        if (dto.getTitle() != null) {
+            hotDeal.setTitle(dto.getTitle());
+        }
+        if (dto.getContent() != null) {
+            hotDeal.setContent(dto.getContent());
+        }
+        if (dto.getPrice() != null) {
+            hotDeal.setPrice(dto.getPrice());
+        }
+        if (dto.getShopName() != null) {
+            hotDeal.setShopName(dto.getShopName());
+        }
+        if (dto.getShopLink() != null) {
+            hotDeal.setShopLink(dto.getShopLink());
+        }
+        if (files != null && !files.isEmpty()) {
+            s3Service.pacthFile(hotDeal.getId(), files);
+        }
+        hotDeal.setUpdatedAt(LocalDateTime.now());
+
+        hotDealRepository.save(hotDeal);
+    }
+    @Transactional
+    public void deleteById(Long id) {
+        hotDealRepository.deleteById(id);
+
     }
 }
