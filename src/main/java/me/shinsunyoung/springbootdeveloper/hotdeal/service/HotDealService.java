@@ -33,10 +33,14 @@ public class HotDealService {
                 String fileUrl = s3Service.updateFiler(file);
                 Image image = new Image();
                 image.setFileUrl(fileUrl);
+                image.setHotDeal(hotDeal);
                 hotDeal.addImage(image);
                 dto.getImageDtos().add(new ImageDto(fileUrl));
             }
+        } else {
+            System.out.println("이미지 없이 저장됨");
         }
+        hotDealRepository.save(hotDeal);
     }
     @Transactional
     public List<HotDealDto> findAllHotDeal() {

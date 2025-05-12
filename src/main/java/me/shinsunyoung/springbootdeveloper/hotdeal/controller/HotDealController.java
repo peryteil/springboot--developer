@@ -2,6 +2,7 @@ package me.shinsunyoung.springbootdeveloper.hotdeal.controller;
 
 import me.shinsunyoung.springbootdeveloper.hotdeal.dto.HotDealDto;
 import me.shinsunyoung.springbootdeveloper.hotdeal.service.HotDealService;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,14 +18,15 @@ public class HotDealController {
         this.hotDealService = hotDealService;
     }
 
-    @PostMapping("create")
-    public ResponseEntity<HotDealDto> insertHotDeal(
-            @RequestPart("dto")HotDealDto dto,
-            @RequestPart("file")List<MultipartFile> files
-            ) {
+    @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Void> insertHotDeal(
+            @RequestPart("dto") HotDealDto dto,
+            @RequestPart(value = "files", required = false) List<MultipartFile> files
+    ) {
         hotDealService.createHotDeal(dto, files);
         return ResponseEntity.ok().build();
     }
+
     @GetMapping("/findAll")
     public ResponseEntity<List<HotDealDto>> getAllHotDeal(){
         List<HotDealDto> hotDealDtos = hotDealService.findAllHotDeal();
