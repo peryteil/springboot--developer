@@ -3,6 +3,7 @@ package me.shinsunyoung.springbootdeveloper.config.oauth;
 import lombok.RequiredArgsConstructor;
 import me.shinsunyoung.springbootdeveloper.domain.User;
 import me.shinsunyoung.springbootdeveloper.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -16,6 +17,7 @@ import java.util.Map;
 public class OAuth2UserCustomService extends DefaultOAuth2UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -45,29 +47,27 @@ public class OAuth2UserCustomService extends DefaultOAuth2UserService {
             providerId = attributes.get("sub").toString();
         }
 
-        // hybrid 전략 적용
         User user = userRepository.findByEmail(email).orElse(null);
         if (user == null) {
             user = userRepository.findByProviderAndProviderId(registrationId, providerId).orElse(null);
         }
 
         if (user == null) {
+            String encodedPassword = passwordEncoder.encode("oauth2user-default-password"); // 더미 비밀번호 암호화
             user = User.builder()
                     .email(email)
                     .nickname(name)
+                    .password(encodedPassword) // 암호화된 비밀번호 저장
                     .provider(registrationId)
                     .providerId(providerId)
                     .build();
         } else if (!user.getEmail().equals(email)) {
             // 이메일 충돌 또는 연결 유도 메시지 필요
-            // 여기서 사용자 안내 로직 (ex. 리다이렉트 페이지 or 경고 로그)
         }
 
         userRepository.save(user);
         return oAuth2User;
     }
-
-
 
     private void saveOrUpdate(String email, String name) {
         User user = userRepository.findByEmail(email)
@@ -75,6 +75,7 @@ public class OAuth2UserCustomService extends DefaultOAuth2UserService {
                 .orElse(User.builder()
                         .email(email)
                         .nickname(name)
+                        .password(passwordEncoder.encode("oauth2user")) // 여기도 동일하게 적용
                         .build());
 
         userRepository.save(user);

@@ -33,7 +33,7 @@ public class JwtFactory {
     }
 
     // jjwt 라이브러리를 사용해 JWT 토큰 생성
-    public String createToKen(JwtProperties jwtProperties) {
+    public String createToken(JwtProperties jwtProperties) {
         return Jwts.builder()
                 .setSubject(subject)
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
@@ -44,4 +44,5 @@ public class JwtFactory {
                 .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecretKey())
                 .compact();
     }
+
 }
