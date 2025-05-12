@@ -49,7 +49,7 @@ public class User implements UserDetails {
         return User.builder()
                 .email(email)
                 .nickname(nickname)
-                .password("")  // 소셜 로그인은 패스워드 없음
+                .password(null)  // DB가 허용한다면 null 저장
                 .provider(provider)
                 .providerId(providerId)
                 .build();

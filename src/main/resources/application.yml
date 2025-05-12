@@ -1,5 +1,13 @@
 spring:
+  datasource:
+    url: jdbc:mysql://awseb-e-ywnmbap8x2-stack-awsebrdsdatabase-ul7iljewboaj.c0vo2ike8h6l.us-east-1.rds.amazonaws.com:3306/chocoworld?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: chocoworld
+    password: chocoworld
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
   jpa:
+    hibernate:
+      ddl-auto: create
     show-sql: true
     properties:
       hibernate:
