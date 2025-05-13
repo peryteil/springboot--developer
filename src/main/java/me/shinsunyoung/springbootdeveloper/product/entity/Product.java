@@ -1,4 +1,4 @@
-package me.shinsunyoung.springbootdeveloper.hotdeal.entity;
+package me.shinsunyoung.springbootdeveloper.product.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -12,28 +12,32 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-public class HotDeal {
+public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
-    private String shopName;
-    private String shopLink;
     private Integer price;
+    private String materials;//재료
+    private String explamationDate;//유통기한
+    private String weight;
+    private String origin;//원산지
+    private Integer stock;
     private String content;
-    private Integer viewCount;
-    private Integer likeCount;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "hotDeal", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product" , cascade = CascadeType.ALL)
     private List<Image> images = new ArrayList<>();
 
+
     public void addImage(Image image) {
-        if (images == null) {
+        if (image == null) {
             images = new ArrayList<>();
         }
         images.add(image);
-        image.setHotDeal(this);
+        image.setProduct(this);
+
     }
+
 }

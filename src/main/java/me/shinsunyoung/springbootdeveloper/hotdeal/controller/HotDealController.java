@@ -32,4 +32,20 @@ public class HotDealController {
         List<HotDealDto> hotDealDtos = hotDealService.findAllHotDeal();
         return ResponseEntity.ok(hotDealDtos);
     }
+
+    @PatchMapping(value = "/update/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Void> updateHotDeal(
+            @PathVariable("id") Long id,
+            @RequestPart("dto") HotDealDto dto,
+            @RequestPart(value = "files", required = false) List<MultipartFile> files
+    ) {
+        hotDealService.updateHotDeal(id, dto, files);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping(value = "/delete/{id}")
+    public ResponseEntity<Void> deleteById(@PathVariable("id") Long id) {
+        hotDealService.deleteById(id);
+        return ResponseEntity.ok().build();
+    }
 }
