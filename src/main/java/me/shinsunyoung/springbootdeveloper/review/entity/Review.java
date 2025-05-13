@@ -1,0 +1,27 @@
+package me.shinsunyoung.springbootdeveloper.review.entity;
+
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import me.shinsunyoung.springbootdeveloper.product.entity.Product;
+
+import java.time.LocalDateTime;
+
+@Entity
+@Getter
+@Setter
+public class Review {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String content;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private Integer likeCount;
+    private Integer viewCount;
+
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
+
+}

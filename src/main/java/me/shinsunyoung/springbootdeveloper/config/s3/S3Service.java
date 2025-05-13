@@ -2,8 +2,10 @@ package me.shinsunyoung.springbootdeveloper.config.s3;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import me.shinsunyoung.springbootdeveloper.brand.entity.Brand;
 import me.shinsunyoung.springbootdeveloper.hotdeal.entity.HotDeal;
 import me.shinsunyoung.springbootdeveloper.hotdeal.repository.HotDealRepository;
+import me.shinsunyoung.springbootdeveloper.product.entity.Product;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,12 +49,11 @@ public class S3Service {
         List<Image> oldImage = hotDeal.getImages();
         for (Image image : oldImage) {
             String key = extractKeyFromUrl(image.getFileUrl());
-            if (amazonS3Client.doesObjectExist(bucketName, key)) {
+            if (key !=null &&amazonS3Client.doesObjectExist(bucketName, key)) {
                 amazonS3Client.deleteObject(bucketName, key);
             }
         }
-        hotDeal.getImages().clear();
-
+        oldImage.clear();
         for (MultipartFile file : files) {
             String fileUrl = updateFiler(file);
             Image image = new Image();
@@ -61,12 +62,49 @@ public class S3Service {
             hotDeal.getImages().add(image);
         }
         hotDealRepository.save(hotDeal);
-
-
     }
     private String extractKeyFromUrl(String fileUrl) {
-        return fileUrl.substring(fileUrl.lastIndexOf("/") + 1);
+        if (fileUrl == null || fileUrl.isEmpty()) {
+            return null; // 혹은 throw new IllegalArgumentException("...");
+        }
+        int index = fileUrl.lastIndexOf("/");
+        return fileUrl.substring(index + 1);
     }
+    @Transactional
+    public void patchProductFile(Long id, List<MultipartFile> files, Product product) {
+        List<Image> oldImages = product.getImages();
+        for (Image image : oldImages) {
+            String key = extractKeyFromUrl(image.getFileUrl());
+            if (key !=null && amazonS3Client.doesObjectExist(bucketName, key)) {
+                amazonS3Client.deleteObject(bucketName, key);
+            }
+        }
+        product.getImages().clear();
+        for (MultipartFile file : files) {
+            String fileUrl = updateFiler(file);
+            Image image = new Image();
+            image.setFileUrl(fileUrl);
+            image.setProduct(product);
+            product.addImage(image);
+        }
+    }
+    @Transactional
+    public void patchBrandFile(Long id, List<MultipartFile> files, Brand brand) {
+        List<Image> oldImages = brand.getImages();
+        for (Image image : oldImages) {
+            String key = extractKeyFromUrl(image.getFileUrl());
+            if (key != null && amazonS3Client.doesObjectExist(bucketName, key)) {
+                amazonS3Client.deleteObject(bucketName, key);
+            }
+        }
+        brand.getImages().clear();
+        for (MultipartFile file : files) {
+            String fileUrl = updateFiler(file);
+            Image image = new Image();
+            image.setFileUrl(fileUrl);
+            image.setBrand(brand);
+            brand.addImage(image);
 
-
+        }
+    }
 }

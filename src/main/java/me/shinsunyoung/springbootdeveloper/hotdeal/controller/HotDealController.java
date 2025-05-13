@@ -1,5 +1,6 @@
 package me.shinsunyoung.springbootdeveloper.hotdeal.controller;
 
+import me.shinsunyoung.springbootdeveloper.dealcomment.dto.DealCommentDto;
 import me.shinsunyoung.springbootdeveloper.hotdeal.dto.HotDealDto;
 import me.shinsunyoung.springbootdeveloper.hotdeal.service.HotDealService;
 import org.springframework.http.MediaType;
@@ -47,5 +48,11 @@ public class HotDealController {
     public ResponseEntity<Void> deleteById(@PathVariable("id") Long id) {
         hotDealService.deleteById(id);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/findById/{id}")
+    public ResponseEntity<HotDealDto> dealCommentFindById(@PathVariable("id") Long id) {
+        HotDealDto dto = hotDealService.commentFindById(id);
+        return ResponseEntity.ok().body(dto);
     }
 }

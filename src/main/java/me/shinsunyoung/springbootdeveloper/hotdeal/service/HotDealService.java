@@ -2,6 +2,8 @@ package me.shinsunyoung.springbootdeveloper.hotdeal.service;
 
 import me.shinsunyoung.springbootdeveloper.config.s3.Image;
 import me.shinsunyoung.springbootdeveloper.config.s3.S3Service;
+import me.shinsunyoung.springbootdeveloper.dealcomment.dto.DealCommentDto;
+import me.shinsunyoung.springbootdeveloper.dealcomment.entity.DealComment;
 import me.shinsunyoung.springbootdeveloper.hotdeal.dto.HotDealDto;
 import me.shinsunyoung.springbootdeveloper.hotdeal.dto.ImageDto;
 import me.shinsunyoung.springbootdeveloper.hotdeal.entity.HotDeal;
@@ -83,4 +85,15 @@ public class HotDealService {
         hotDealRepository.deleteById(id);
 
     }
+
+    @Transactional
+    public HotDealDto commentFindById(Long id) {
+        HotDeal hotDeal = hotDealRepository.findById(id).orElse(null);
+        return HotDealDto.fromEntity(hotDeal);
+    }
+
+    public HotDeal findById(Long id) {
+        return hotDealRepository.findById(id).orElse(null);
+    }
+
 }

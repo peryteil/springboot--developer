@@ -55,7 +55,7 @@ public class ProductService {
     public List<ProductDto> findAllProduct() {
         return productRepository.findAll().stream().map(ProductDto::new).toList();
     }
-
+    @Transactional
     public void updatePrduct(Long id, ProductDto dto, List<MultipartFile> files) {
         Product product = productRepository.findById(id).orElse(null);
         if (dto.getTitle() != null) {
@@ -74,58 +74,18 @@ public class ProductService {
             product.setContent(dto.getContent());
         }
         if (files != null && !files.isEmpty()) {
-            s3Repository.deleteByProductId(product.getId());
+            s3Service.patchProductFile(product.getId(), files, product);
         }
         product.setUpdatedAt(LocalDateTime.now());
         productRepository.save(product);
-
     }
-    // 기존 이미지 항상 삭제
-//imageRepository.deleteByProductId(product.getId()); // 연관된 이미지 모두 삭제
-
+    @Transactional
     public void deleteById(Long id) {
         productRepository.deleteById(id);
     }
-}
-//@Transactional
-//public void updateProduct(Long id, ProductDto dto, List<MultipartFile> files) {
-//    Product product = productRepository.findById(id)
-//            .orElseThrow(() -> new IllegalArgumentException("상품이 존재하지 않습니다."));
-//
-//    // 필드 업데이트
-//    if (dto.getTitle() != null) product.setTitle(dto.getTitle());
-//    if (dto.getPrice() != null) product.setPrice(dto.getPrice());
-//    if (dto.getMaterials() != null) product.setMaterials(dto.getMaterials());
-//    if (dto.getExplamationDate() != null) product.setExplamationDate(dto.getExplamationDate());
-//    if (dto.getWeight() != null) product.setWeight(dto.getWeight());
-//    if (dto.getOrigin() != null) product.setOrigin(dto.getOrigin());
-//    if (dto.getContent() != null) product.setContent(dto.getContent());
-//    if (dto.getStock() != null) product.setStock(dto.getStock());
-//
-//    // ✅ 이미지 업데이트 (선택: 기존 이미지 삭제)
-//    if (files != null && !files.isEmpty()) {
-//        // 기존 이미지 삭제하고 새로 추가하려면 아래 주석 해제
-//        // imageRepository.deleteByProductId(product.getId());
-//
-//        List<String> urls = s3Service.pacthFile(product.getId(), files);
-//        for (String url : urls) {
-//            Image image = new Image();
-//            image.setFileUrl(url);
-//            image.setProduct(product); // 양방향 연관관계 설정
-//            product.addImage(image);   // helper method 사용
-//            dto.getImageDtos().add(new ImageDto(url)); // DTO에도 반영
-//        }
-//    }
-//
-//    product.setUpdatedAt(LocalDateTime.now());
-//    productRepository.save(product);
-//}
-//public List<String> pacthFile(Long productId, List<MultipartFile> files) {
-//    List<String> urls = new ArrayList<>();
-//    for (MultipartFile file : files) {
-//        String url = updateFiler(file); // 실제 S3 업로드 로직
-//        urls.add(url);
-//    }
-//    return urls;
-//}
 
+    public ProductDto findById(Long id) {
+        Product product = productRepository.findById(id).orElse(null);
+        return ProductDto.fromEntity(product);
+    }
+}

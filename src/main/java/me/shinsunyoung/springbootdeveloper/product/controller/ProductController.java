@@ -48,4 +48,10 @@ public class ProductController {
         productService.deleteById(id);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/findById/{id}")
+    public ResponseEntity<ProductDto> findByProductId(@PathVariable("id") Long id) {
+        ProductDto productDto = productService.findById(id);
+        return ResponseEntity.ok().body(productDto);
+    }
 }
