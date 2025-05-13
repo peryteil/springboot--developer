@@ -25,7 +25,7 @@ public class ProductDto {
     private String content;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private List<ImageDto> dtos = new ArrayList<>();
+    private List<ImageDto> imageDtos = new ArrayList<>();
 
 
     public ProductDto(Product product) {
@@ -38,7 +38,9 @@ public class ProductDto {
         this.origin = product.getOrigin();
         this.stock = product.getStock();
         this.content = product.getContent();
-        this.dtos = product.getImages().stream().map(img -> new ImageDto(img.getFileUrl())).toList();
+        this.createdAt = product.getCreatedAt();
+        this.updatedAt = product.getUpdatedAt();
+        this.imageDtos = product.getImages().stream().map(img -> new ImageDto(img.getFileUrl())).toList();
 
     }
 }
