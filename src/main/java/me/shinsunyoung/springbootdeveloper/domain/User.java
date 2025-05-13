@@ -1,14 +1,9 @@
 package me.shinsunyoung.springbootdeveloper.domain;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import lombok.*;
 
+<<<<<<< HEAD
 import java.util.Collection;
 import java.util.List;
 
@@ -21,17 +16,28 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
+=======
+@Getter
+@Setter
+@Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder // ✅ builder() 메서드 생성됨
+public class User {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+>>>>>>> 3ae93ff (develop1)
     private Long id;
 
-    @Column(name = "email", nullable = false, unique = true)
     private String email;
-
-    @Column(name = "nickname")
+    private String password;
     private String nickname;
 
-    @Column(name = "password")
-    private String password;
+    private String provider;
+    private String providerId;
 
+<<<<<<< HEAD
     @Column(name = "provider")
     private String provider; // google, naver, kakao
 
@@ -99,4 +105,10 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+=======
+    public User update(String name) {
+        this.nickname = name;
+        return this;
+    }
+>>>>>>> 3ae93ff (develop1)
 }
