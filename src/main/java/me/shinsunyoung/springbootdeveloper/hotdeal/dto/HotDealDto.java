@@ -37,4 +37,18 @@ public class HotDealDto {
                 .map(img -> new ImageDto(img.getFileUrl()))
                 .toList();
     }
+
+    public static HotDealDto fromEntity(HotDeal hotDeal) {
+        HotDealDto dto = new HotDealDto();
+        dto.id = hotDeal.getId();
+        dto.title = hotDeal.getTitle();
+        dto.shopLink = hotDeal.getShopLink();
+        dto.shopName = hotDeal.getShopName();
+        dto.price = hotDeal.getPrice();
+        dto.content = hotDeal.getContent();
+        dto.createdAt = hotDeal.getCreatedAt();
+        dto.updatedAt = hotDeal.getUpdatedAt();
+        dto.imageDtos = hotDeal.getImages().stream().map(img -> new ImageDto(img.getFileUrl())).toList();
+        return dto;
+    }
 }

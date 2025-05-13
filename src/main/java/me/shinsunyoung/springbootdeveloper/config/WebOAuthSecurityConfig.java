@@ -75,7 +75,10 @@ public class WebOAuthSecurityConfig {
                         .requestMatchers(new AntPathRequestMatcher("/hotDeal/**")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/update")).permitAll()
                         .anyRequest().permitAll()
-                )
+                        .requestMatchers(new AntPathRequestMatcher("/comment/**")).permitAll()
+//                        이건 나중에 개발 완료할 때 주석을 풀고 위에 있는 api/**를 풀어야 한다.
+//                        .requestMatchers(new AntPathRequestMatcher("/api/**")).authenticated()
+                        .anyRequest().permitAll())
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/login")
                         .authorizationEndpoint(authorizationEndpoint -> authorizationEndpoint.authorizationRequestRepository(oAuth2AuthorizationRequestBasedOnCookieRepository()))

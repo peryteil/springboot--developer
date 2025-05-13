@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import me.shinsunyoung.springbootdeveloper.hotdeal.dto.ImageDto;
 import me.shinsunyoung.springbootdeveloper.product.entity.Product;
+import me.shinsunyoung.springbootdeveloper.review.dto.ReviewDto;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ public class ProductDto {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private List<ImageDto> imageDtos = new ArrayList<>();
+    private List<ReviewDto> reviewDtos = new ArrayList<>();
 
 
     public ProductDto(Product product) {
@@ -40,7 +42,25 @@ public class ProductDto {
         this.content = product.getContent();
         this.createdAt = product.getCreatedAt();
         this.updatedAt = product.getUpdatedAt();
+        this.reviewDtos = product.getReviews().stream().map(ReviewDto::new).toList();
         this.imageDtos = product.getImages().stream().map(img -> new ImageDto(img.getFileUrl())).toList();
+    }
 
+    public static ProductDto fromEntity(Product product) {
+        ProductDto dto = new ProductDto();
+        dto.id = product.getId();
+        dto.title = product.getTitle();
+        dto.price = product.getPrice();
+        dto.materials = product.getMaterials();
+        dto.explamationDate = product.getExplamationDate();
+        dto.weight = product.getWeight();
+        dto.origin = product.getOrigin();
+        dto.stock = product.getStock();
+        dto.content = product.getContent();
+        dto.createdAt = product.getCreatedAt();
+        dto.updatedAt = product.getUpdatedAt();
+        dto.reviewDtos = product.getReviews().stream().map(ReviewDto::new).toList();
+        dto.imageDtos = product.getImages().stream().map(img -> new ImageDto(img.getFileUrl())).toList();
+        return dto;
     }
 }

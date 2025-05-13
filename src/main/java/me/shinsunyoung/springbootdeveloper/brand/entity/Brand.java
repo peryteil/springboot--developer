@@ -1,10 +1,9 @@
-package me.shinsunyoung.springbootdeveloper.hotdeal.entity;
+package me.shinsunyoung.springbootdeveloper.brand.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import me.shinsunyoung.springbootdeveloper.config.s3.Image;
-import me.shinsunyoung.springbootdeveloper.dealcomment.entity.DealComment;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -13,31 +12,32 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-public class HotDeal {
+public class Brand {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
-    private String shopName;
-    private String shopLink;
-    private Integer price;
     private String content;
-    private Integer viewCount;
-    private Integer likeCount;
+    private Integer season;
+    private String office;
+    private String country;
+    private String representative;//대표제품
+    private String webSite;
+    private String introduction;//소개글
+    private String history;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-
-    @OneToMany(mappedBy = "hotDeal", cascade = CascadeType.ALL,orphanRemoval = true)
-    private List<DealComment> dealComments = new ArrayList<>();
-
-    @OneToMany(mappedBy = "hotDeal", cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "brand", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> images = new ArrayList<>();
 
     public void addImage(Image image) {
-        if (images == null) {
+        if (image == null) {
             images = new ArrayList<>();
         }
         images.add(image);
-        image.setHotDeal(this);
+        image.setBrand(this);
+
     }
+
+
 }

@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import me.shinsunyoung.springbootdeveloper.brand.entity.Brand;
 import me.shinsunyoung.springbootdeveloper.hotdeal.entity.HotDeal;
 import me.shinsunyoung.springbootdeveloper.product.entity.Product;
 
@@ -27,4 +28,7 @@ public class Image {
     @ManyToOne
     @JoinColumn(name = "product_ud")
     private Product product;
+    @ManyToOne
+    @JoinColumn(name = "brand_id")
+    private Brand brand;
 }
