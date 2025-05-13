@@ -12,14 +12,15 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
-@Table(name = "users")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
 @Entity
+@Table(name = "users")
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User implements UserDetails {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", updatable = false)
+    @Column(name = "id", updatable = false, nullable = false)
     private Long id;
 
     @Column(name = "email", nullable = false, unique = true)
@@ -31,10 +32,11 @@ public class User implements UserDetails {
     @Column(name = "password")
     private String password;
 
+    @Column(name = "provider")
     private String provider; // google, naver, kakao
 
-
-    private String providerId; // OAuth2 provider가 제공하는 유니크 ID
+    @Column(name = "provider_id")
+    private String providerId;
 
     @Builder
     public User(String email, String password, String nickname, String provider, String providerId) {
@@ -44,30 +46,40 @@ public class User implements UserDetails {
         this.provider = provider;
         this.providerId = providerId;
     }
-    // 소셜 로그인 전용 생성자
+
+    // 소셜 로그인 전용 정적 팩토리 메서드
     public static User socialUser(String email, String nickname, String provider, String providerId) {
         return User.builder()
                 .email(email)
                 .nickname(nickname)
-                .password(null)  // DB가 허용한다면 null 저장
+                .password(null)
                 .provider(provider)
                 .providerId(providerId)
                 .build();
     }
+
+    public User update(String nickname) {
+        this.nickname = nickname;
+        return this;
+    }
+
+    // Spring Security UserDetails 구현
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("user"));
+        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
     @Override
     public String getUsername() {
-        return email;
+        return this.email;
     }
 
     @Override
     public String getPassword() {
-        return password;
+        return this.password;
     }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;
@@ -86,10 +98,5 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
-    }
-
-    public User update(String nickname) {
-        this.nickname = nickname;
-        return this;
     }
 }
