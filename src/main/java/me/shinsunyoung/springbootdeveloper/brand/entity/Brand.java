@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import me.shinsunyoung.springbootdeveloper.config.s3.Image;
+import me.shinsunyoung.springbootdeveloper.product.entity.Product;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -27,10 +28,13 @@ public class Brand {
     private String history;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    @OneToMany(mappedBy = "brand", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "brand", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.LAZY)
     private List<Image> images = new ArrayList<>();
 
+    @OneToMany(mappedBy = "brand", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.LAZY)
+    private List<Product> products = new ArrayList<>();
     public void addImage(Image image) {
+
         if (image == null) {
             images = new ArrayList<>();
         }

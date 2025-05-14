@@ -21,7 +21,7 @@ public class Review {
     private Integer likeCount;
     private Integer viewCount;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
 

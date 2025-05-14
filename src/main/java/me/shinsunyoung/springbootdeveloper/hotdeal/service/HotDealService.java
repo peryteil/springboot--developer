@@ -4,6 +4,7 @@ import me.shinsunyoung.springbootdeveloper.config.s3.Image;
 import me.shinsunyoung.springbootdeveloper.config.s3.S3Service;
 import me.shinsunyoung.springbootdeveloper.dealcomment.dto.DealCommentDto;
 import me.shinsunyoung.springbootdeveloper.dealcomment.entity.DealComment;
+import me.shinsunyoung.springbootdeveloper.hotdeal.dto.HotDealAllDto;
 import me.shinsunyoung.springbootdeveloper.hotdeal.dto.HotDealDto;
 import me.shinsunyoung.springbootdeveloper.hotdeal.dto.ImageDto;
 import me.shinsunyoung.springbootdeveloper.hotdeal.entity.HotDeal;
@@ -32,8 +33,9 @@ public class HotDealService {
         hotDeal.setShopLink(dto.getShopLink());
         hotDeal.setPrice(dto.getPrice());
         hotDeal.setCreatedAt(LocalDateTime.now());
-        hotDeal.setLikeCount(0);
-        hotDeal.setViewCount(0);
+        hotDeal.setCategory(dto.getCategory());
+        hotDeal.setLikeCount(dto.getLikeCount());
+        hotDeal.setViewCount(dto.getViewCount());
 
         if (files != null && !files.isEmpty()) {
             for (MultipartFile file : files) {
@@ -95,5 +97,8 @@ public class HotDealService {
     public HotDeal findById(Long id) {
         return hotDealRepository.findById(id).orElse(null);
     }
-
+    @Transactional(readOnly = true)
+    public List<HotDealAllDto> findAll() {
+        return hotDealRepository.findAll().stream().map(HotDealAllDto::fromEntity).toList();
+    }
 }

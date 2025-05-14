@@ -35,4 +35,15 @@ public class ReviewService {
     public List<ReviewDto> getReviewByProductId(Long id) {
         return repository.findByProductId(id).stream().map(ReviewDto::fromEntity).toList();
     }
+
+    public void updateReview(Long id, String content, Integer rating) {
+        Review review = repository.findById(id).orElse(null);
+        review.setContent(content);
+        review.setRating(rating);
+        review.setUpdatedAt(LocalDateTime.now());
+        repository.save(review);
+    }
+    public void deleteById(Long id) {
+        repository.deleteById(id);
+    }
 }

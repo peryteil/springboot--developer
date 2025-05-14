@@ -1,6 +1,7 @@
 package me.shinsunyoung.springbootdeveloper.hotdeal.controller;
 
 import me.shinsunyoung.springbootdeveloper.dealcomment.dto.DealCommentDto;
+import me.shinsunyoung.springbootdeveloper.hotdeal.dto.HotDealAllDto;
 import me.shinsunyoung.springbootdeveloper.hotdeal.dto.HotDealDto;
 import me.shinsunyoung.springbootdeveloper.hotdeal.service.HotDealService;
 import org.springframework.http.MediaType;
@@ -27,11 +28,16 @@ public class HotDealController {
         hotDealService.createHotDeal(dto, files);
         return ResponseEntity.ok().build();
     }
-
+    //전체 불러오기 핫딜의 모든것 굳이 안쓸듯
     @GetMapping("/findAll")
     public ResponseEntity<List<HotDealDto>> getAllHotDeal(){
         List<HotDealDto> hotDealDtos = hotDealService.findAllHotDeal();
         return ResponseEntity.ok(hotDealDtos);
+    }
+    @GetMapping("/findAllList")
+    public ResponseEntity<List<HotDealAllDto>> allHotDeal(){
+        List<HotDealAllDto> hotDealAllDtos = hotDealService.findAll();
+        return ResponseEntity.ok(hotDealAllDtos);
     }
 
     @PatchMapping(value = "/update/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

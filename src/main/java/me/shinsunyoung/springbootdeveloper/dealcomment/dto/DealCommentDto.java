@@ -16,4 +16,7 @@ public class DealCommentDto {
     private String content;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+    public DealCommentDto(String content) {
+    }
 }

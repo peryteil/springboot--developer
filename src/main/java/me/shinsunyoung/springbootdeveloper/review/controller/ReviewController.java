@@ -31,6 +31,20 @@ public class ReviewController {
         return ResponseEntity.ok(reviewService.getReviewByProductId(id));
     }
 
-//    @PatchMapping("/update/{id}")
-//    public ResponseEntity<Void>
+    @PatchMapping("/update/{id}")
+    public ResponseEntity<Void> updateReview(
+            @PathVariable("id") Long id,
+            @RequestParam("content") String content,
+            @RequestParam("rating") Integer rating
+    ) {
+        reviewService.updateReview(id, content, rating);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteReview(@PathVariable("id") Long id) {
+        reviewService.deleteById(id);
+        return ResponseEntity.ok().build();
+    }
+
 }

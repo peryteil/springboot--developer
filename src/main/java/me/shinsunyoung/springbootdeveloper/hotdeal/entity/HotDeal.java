@@ -23,14 +23,15 @@ public class HotDeal {
     private Integer price;
     private String content;
     private Integer viewCount;
+    private String category;
     private Integer likeCount;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "hotDeal", cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "hotDeal", cascade = CascadeType.ALL,orphanRemoval = true,fetch =  FetchType.LAZY)
     private List<DealComment> dealComments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "hotDeal", cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "hotDeal", cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
     private List<Image> images = new ArrayList<>();
 
     public void addImage(Image image) {

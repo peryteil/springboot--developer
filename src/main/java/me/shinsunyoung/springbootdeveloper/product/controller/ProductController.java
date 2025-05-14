@@ -1,6 +1,7 @@
 package me.shinsunyoung.springbootdeveloper.product.controller;
 
 import me.shinsunyoung.springbootdeveloper.product.dto.ProductDto;
+import me.shinsunyoung.springbootdeveloper.product.dto.ProductFindAll;
 import me.shinsunyoung.springbootdeveloper.product.service.ProductService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -28,9 +29,15 @@ public class ProductController {
     }
 
     @GetMapping("/findAll")
-    public ResponseEntity<List<ProductDto>> getFindAll() {
-        List<ProductDto> productDtos = productService.findAllProduct();
-        return ResponseEntity.ok().body(productDtos);
+    public ResponseEntity<List<ProductFindAll>> getFindAll() {
+        List<ProductFindAll> product = productService.findAllProduct();
+        return ResponseEntity.ok().body(product);
+    }
+
+    @GetMapping("/findAllSimple")
+    public ResponseEntity<List<ProductFindAll>> findAllSimple() {
+        List<ProductFindAll> productFindAlls = productService.findAllSimple();
+        return ResponseEntity.ok().body(productFindAlls);
     }
 
     @PatchMapping("/update/{id}")
@@ -39,6 +46,7 @@ public class ProductController {
             @RequestPart("dto") ProductDto dto,
             @RequestPart(value = "files", required = false) List<MultipartFile> files
     ) {
+
         productService.updatePrduct(id, dto, files);
         return ResponseEntity.ok().build();
     }
@@ -53,5 +61,14 @@ public class ProductController {
     public ResponseEntity<ProductDto> findByProductId(@PathVariable("id") Long id) {
         ProductDto productDto = productService.findById(id);
         return ResponseEntity.ok().body(productDto);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<ProductDto>> searchBrandAndCategory(
+            @RequestParam(required = false) String brand,
+            @RequestParam(required = false) String category
+    ) {
+        List<ProductDto> result = productService.findByBrandAndCategory(brand, category);
+        return ResponseEntity.ok(result);
     }
 }
