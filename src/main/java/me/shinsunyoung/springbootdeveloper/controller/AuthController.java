@@ -19,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Duration;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -59,7 +60,7 @@ public class AuthController {
         CookieUtil.addCookie(response, REFRESH_TOKEN_COOKIE_NAME, refreshToken, (int) REFRESH_TOKEN_DURATION.toSeconds());
 
         // 5. 액세스 토큰 반환
-        return ResponseEntity.ok().body(accessToken);
+        return ResponseEntity.ok().body(Map.of("accessToken", accessToken));
     }
 
     private void saveRefreshToken(Long userId, String newRefreshToken) {
