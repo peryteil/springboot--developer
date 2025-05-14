@@ -25,4 +25,11 @@ public class RefreshTokenService {
 
         refreshTokenRepository.deleteByUserId(userId);
     }
+    @Transactional
+    public void updateRefreshToken(Long userId, String newToken) {
+        RefreshToken token = refreshTokenRepository.findByUserId(userId)
+                .map(r -> r.update(newToken))
+                .orElse(new RefreshToken(userId, newToken));
+        refreshTokenRepository.save(token);
+    }
 }
