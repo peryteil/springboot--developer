@@ -17,6 +17,7 @@ public class Review {
     private String content;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private Integer rating;
     private Integer likeCount;
     private Integer viewCount;
 

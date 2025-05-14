@@ -44,10 +44,11 @@ public class UserController {
             return ResponseEntity.status(400).body("이미 가입된 이메일입니다.");
         }
 
-        User newUser = new User();
-        newUser.setEmail(request.getEmail());
-        newUser.setPassword(passwordEncoder.encode(request.getPassword()));
-        newUser.setNickname(request.getName());
+        User newUser = User.builder()
+                .email(request.getEmail())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .nickname(request.getName())
+                .build();
 
         userRepository.save(newUser);
         return ResponseEntity.ok("회원가입 성공");
