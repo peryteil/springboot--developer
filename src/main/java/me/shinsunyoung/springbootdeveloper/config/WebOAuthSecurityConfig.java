@@ -20,6 +20,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
@@ -45,6 +46,12 @@ public class WebOAuthSecurityConfig {
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowCredentials(true);
             }
+            @Override
+            public void addResourceHandlers(ResourceHandlerRegistry registry) {
+                registry
+                        .addResourceHandler("/.well-known/**")
+                        .addResourceLocations("classpath:/static/"); // 없지만 에러 안 나게 처리
+            }
         };
     }
 
@@ -68,10 +75,10 @@ public class WebOAuthSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .formLogin(form -> form
-                        .loginPage("/login") // 커스텀 로그인 페이지 경로
-                        .loginProcessingUrl("/login") // React 폼에서 POST 전송되는 경로
-                        .defaultSuccessUrl("/") // 로그인 성공 후 이동
-                        .failureUrl("/login?error") // 실패 시 이동
+                        .loginPage("/login")
+                        .loginProcessingUrl("/login")
+                        .defaultSuccessUrl("/")
+                        .failureUrl("/login?error")
                         .permitAll()
                 )
                 .logout(logout -> logout
@@ -82,17 +89,26 @@ public class WebOAuthSecurityConfig {
                 .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests(auth -> auth
-                        .requestMatchers(new AntPathRequestMatcher("/api/token")).permitAll()
-                        .requestMatchers(new AntPathRequestMatcher("/api/**")).permitAll()
-                        .requestMatchers(new AntPathRequestMatcher("/hotDeal/**")).permitAll()
-                        .requestMatchers(new AntPathRequestMatcher("/update")).permitAll()
-//                        이건 나중에 개발 완료할 때 주석을 풀고 위에 있는 api/**를 풀어야 한다.
-//                        .requestMatchers(new AntPathRequestMatcher("/api/**")).authenticated()
-                        .anyRequest().permitAll())
+                        .requestMatchers(
+                                "/favicon.ico",
+                                "/img/**",
+                                "/css/**",
+                                "/js/**",
+                                "/.well-known/**",
+                                "/h2-console/**",
+                                "/api/token",
+                                "/api/**",
+                                "/hotDeal/**",
+                                "/update"
+                        ).permitAll()
+                        .anyRequest().permitAll()
+                )
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/login")
-                        .authorizationEndpoint(authorizationEndpoint -> authorizationEndpoint.authorizationRequestRepository(oAuth2AuthorizationRequestBasedOnCookieRepository()))
-                        .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint.userService(oAuth2UserCustomService))
+                        .authorizationEndpoint(authorizationEndpoint -> authorizationEndpoint
+                                .authorizationRequestRepository(oAuth2AuthorizationRequestBasedOnCookieRepository()))
+                        .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint
+                                .userService(oAuth2UserCustomService))
                         .successHandler(oAuth2SuccessHandler())
                 )
                 .exceptionHandling(exceptionHandling -> exceptionHandling
@@ -102,11 +118,6 @@ public class WebOAuthSecurityConfig {
                         ))
                 .build();
     }
-
-
-
-
-
     @Bean
     public OAuth2SuccessHandler oAuth2SuccessHandler() {
         return new OAuth2SuccessHandler(tokenProvider,
