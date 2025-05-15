@@ -24,12 +24,11 @@ public class TokenProvider {
 
     public String generateToken(User user, Duration expiredAt) {
         Date now = new Date();
-        return makeToken(new Date(now.getTime() + expiredAt.toMillis()), user);
+        Date expiry = new Date(now.getTime() + expiredAt.toMillis());
+        return makeToken(now, expiry, user);
     }
 
-    private String makeToken(Date expiry, User user) {
-        Date now = new Date();
-
+    private String makeToken(Date now, Date expiry, User user) {
         return Jwts.builder()
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
                 .setIssuer(jwtProperties.getIssuer())
@@ -74,3 +73,5 @@ public class TokenProvider {
                 .getBody();
     }
 }
+
+

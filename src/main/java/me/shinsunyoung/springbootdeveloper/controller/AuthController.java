@@ -41,6 +41,8 @@ public class AuthController {
                                    HttpServletRequest request,
                                    HttpServletResponse response) {
 
+        System.out.println("요청 이메일: " + loginRequest.getEmail());
+
         // 1. 인증 처리
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword())
