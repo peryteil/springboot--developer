@@ -52,11 +52,11 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         User user = userService.findByEmail(email);
 
-        String refreshToken = tokenProvider.generateToken(user, REFRESH_TOKEN_DURATION);
+        String refreshToken = tokenProvider.generateToken(user);
         saveRefreshToken(user.getId(), refreshToken);
         addRefreshTokenToCookie(request, response, refreshToken);
 
-        String accessToken = tokenProvider.generateToken(user, ACCESS_TOKEN_DURATION);
+        String accessToken = tokenProvider.generateToken(user);
         String targetUrl = getTargetUrl(accessToken);
 
         clearAuthenticationAttributes(request, response);

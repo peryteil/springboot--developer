@@ -53,8 +53,8 @@ public class AuthController {
         User user = userService.findByEmail(loginRequest.getEmail());
 
         // 3. 토큰 생성
-        String refreshToken = tokenProvider.generateToken(user, REFRESH_TOKEN_DURATION);
-        String accessToken = tokenProvider.generateToken(user, ACCESS_TOKEN_DURATION);
+        String refreshToken = tokenProvider.generateToken(user);
+        String accessToken = tokenProvider.generateToken(user);
 
         // 4. 리프레시 토큰 저장 및 쿠키 저장
         saveRefreshToken(user.getId(), refreshToken);

@@ -6,6 +6,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 import me.shinsunyoung.springbootdeveloper.domain.User;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -18,13 +19,17 @@ import java.util.Set;
 
 @RequiredArgsConstructor
 @Service
+
 public class TokenProvider {
 
     private final JwtProperties jwtProperties;
 
-    public String generateToken(User user, Duration expiredAt) {
+    @Value("${security.jwt.token.expire-length:14400000}") // 기본값 4시간 = 4 * 60 * 60 * 1000
+    private long validityInMilliseconds; // milliseconds
+
+    public String generateToken(User user) {
         Date now = new Date();
-        Date expiry = new Date(now.getTime() + expiredAt.toMillis());
+        Date expiry = new Date(now.getTime() + validityInMilliseconds);
         return makeToken(now, expiry, user);
     }
 
