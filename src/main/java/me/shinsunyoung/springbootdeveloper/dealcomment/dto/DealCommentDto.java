@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import me.shinsunyoung.springbootdeveloper.dealcomment.entity.DealComment;
 
 import java.time.LocalDateTime;
 
@@ -17,6 +18,11 @@ public class DealCommentDto {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public DealCommentDto(String content) {
+    public DealCommentDto(DealComment dealComment) {
+        this.id = dealComment.getId();
+        this.content = dealComment.getContent();
+        this.createdAt = dealComment.getCreatedAt();
+        this.updatedAt = dealComment.getUpdatedAt();
+
     }
 }

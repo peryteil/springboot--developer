@@ -19,7 +19,7 @@ public class Brand {
     private Long id;
     private String title;
     private String content;
-    private Integer season;
+    private Integer founded;
     private String office;
     private String country;
     private String representative;//대표제품

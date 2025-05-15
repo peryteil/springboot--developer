@@ -1,6 +1,7 @@
 package me.shinsunyoung.springbootdeveloper.brand.controller;
 
 import me.shinsunyoung.springbootdeveloper.brand.dto.BrandDto;
+import me.shinsunyoung.springbootdeveloper.brand.dto.BrandResDto;
 import me.shinsunyoung.springbootdeveloper.brand.service.BrandService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +26,17 @@ public class BrandController {
         brandService.saveBrand(dto, files);
         return ResponseEntity.ok().build();
     }
+    @GetMapping("/findAllList")
+    public ResponseEntity<List<BrandResDto>> findAllListBrand() {
+        List<BrandResDto> dtos = brandService.findAllList();
+        return ResponseEntity.ok().body(dtos);
+    }
+
+    @GetMapping("/findByCountry/{country}")
+    public ResponseEntity<List<BrandResDto>> findByCountry(@PathVariable("country") String country) {
+        List<BrandResDto> dtos = brandService.findBycountry(country);
+        return ResponseEntity.ok().body(dtos);
+    }
 
     @GetMapping("/findAll")
     public ResponseEntity<List<BrandDto>> findAllBrand() {
@@ -32,7 +44,7 @@ public class BrandController {
         return ResponseEntity.ok().body(brandDtos);
     }
 
-    @GetMapping("/findBy/{id}")
+    @GetMapping("/findById/{id}")
     public ResponseEntity<BrandDto> findById(@PathVariable("id") Long id) {
         BrandDto dto = brandService.findByid(id);
         return ResponseEntity.ok().body(dto);

@@ -1,6 +1,7 @@
 package me.shinsunyoung.springbootdeveloper.review.controller;
 
 import me.shinsunyoung.springbootdeveloper.review.dto.ReviewDto;
+import me.shinsunyoung.springbootdeveloper.review.dto.ReviewResDto;
 import me.shinsunyoung.springbootdeveloper.review.service.ReviewService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,10 +20,9 @@ public class ReviewController {
     @PostMapping("/create/{id}")
     public ResponseEntity<Void> createReview(
             @PathVariable("id")Long productId,
-            @RequestPart("content")String content,
-            @RequestPart("rating")Integer rating
+            @RequestBody  ReviewDto dto
             ) {
-        reviewService.createReview(productId, content , rating);
+        reviewService.createReview(productId, dto);
         return ResponseEntity.ok().build();
     }
 
@@ -45,6 +45,22 @@ public class ReviewController {
     public ResponseEntity<Void> deleteReview(@PathVariable("id") Long id) {
         reviewService.deleteById(id);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/top")
+    public ResponseEntity<List<ReviewResDto>> getTop5Reviews() {
+        List<ReviewResDto> result = reviewService.getTop5ReviewsWithImage();
+        return ResponseEntity.ok(result);
+    }
+    @GetMapping("/topLike")
+    public ResponseEntity<List<ReviewResDto>> getTop5LikeReviews() {
+        List<ReviewResDto> result = reviewService.getTop5ViewReviewsWithImage();
+        return ResponseEntity.ok(result);
+    }
+    @GetMapping("/latest")
+    public ResponseEntity<List<ReviewResDto>> getLatest5Reviews() {
+        List<ReviewResDto> result = reviewService.getLatest5ReviewsWithImage();
+        return ResponseEntity.ok(result);
     }
 
 }

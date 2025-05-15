@@ -18,7 +18,7 @@ public class DealComment {
     private String content;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hot_deal_id")
     private HotDeal hotDeal;
 

@@ -1,6 +1,7 @@
 package me.shinsunyoung.springbootdeveloper.brand.service;
 
 import me.shinsunyoung.springbootdeveloper.brand.dto.BrandDto;
+import me.shinsunyoung.springbootdeveloper.brand.dto.BrandResDto;
 import me.shinsunyoung.springbootdeveloper.brand.entity.Brand;
 import me.shinsunyoung.springbootdeveloper.brand.repository.BrandRepository;
 import me.shinsunyoung.springbootdeveloper.config.s3.Image;
@@ -28,7 +29,7 @@ public class BrandService {
         Brand brand = new Brand();
         brand.setTitle(dto.getTitle());
         brand.setContent(dto.getContent());
-        brand.setSeason(dto.getSeason());
+        brand.setFounded(dto.getFounded());
         brand.setOffice(dto.getOffice());
         brand.setRepresentative(dto.getRepresentative());
         brand.setWebSite(dto.getWebSite());
@@ -91,5 +92,14 @@ public class BrandService {
     @Transactional
     public void deleteById(Long id) {
         repository.deleteById(id);
+    }
+
+    public List<BrandResDto> findAllList() {
+        return repository.findAll().stream().map(BrandResDto::fromEntity).toList();
+    }
+
+    public List<BrandResDto> findBycountry(String country) {
+        List<Brand> brands = repository.findByCountry(country);
+        return brands.stream().map(BrandResDto::fromEntity).toList();
     }
 }

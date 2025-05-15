@@ -3,6 +3,7 @@ package me.shinsunyoung.springbootdeveloper.review.service;
 import me.shinsunyoung.springbootdeveloper.product.entity.Product;
 import me.shinsunyoung.springbootdeveloper.product.repository.ProductRepository;
 import me.shinsunyoung.springbootdeveloper.review.dto.ReviewDto;
+import me.shinsunyoung.springbootdeveloper.review.dto.ReviewResDto;
 import me.shinsunyoung.springbootdeveloper.review.entity.Review;
 import me.shinsunyoung.springbootdeveloper.review.repository.ReviewRepository;
 import org.springframework.stereotype.Service;
@@ -20,15 +21,15 @@ public class ReviewService {
         this.productRepository = productRepository;
     }
 
-    public void createReview(Long productId, String content,Integer rating) {
+    public void createReview(Long productId, ReviewDto dto) {
         Product product = productRepository.findById(productId).orElse(null);
         Review review = new Review();
         review.setProduct(product);
-        review.setContent(content);
-        review.setRating(rating);
+        review.setContent(dto.getContent());
+        review.setRating(dto.getRating());
         review.setCreatedAt(LocalDateTime.now());
-        review.setLikeCount(0);
-        review.setViewCount(0);
+        review.setLikeCount(dto.getLikeCount());
+        review.setViewCount(dto.getViewCount());
         repository.save(review);
     }
 
@@ -45,5 +46,23 @@ public class ReviewService {
     }
     public void deleteById(Long id) {
         repository.deleteById(id);
+    }
+
+    public List<ReviewResDto> getTop5ReviewsWithImage() {
+        List<Review> reviews = repository.findTop5ByOrderByLikeCountDesc();
+        return reviews.stream().map(ReviewResDto::fromEntity).toList();
+
+    }
+
+    public List<ReviewResDto> getTop5ViewReviewsWithImage() {
+        List<Review> reviews = repository.findTop5ByOrderByViewCountDesc();
+        return reviews.stream().map(ReviewResDto::fromEntity).toList();
+
+    }
+
+    public List<ReviewResDto> getLatest5ReviewsWithImage() {
+        List<Review> reviews = repository.findTop5ByOrderByCreatedAtDesc();
+        return reviews.stream()
+                .map(ReviewResDto::fromEntity).toList();
     }
 }

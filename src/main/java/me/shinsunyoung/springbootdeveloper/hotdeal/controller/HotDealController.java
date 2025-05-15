@@ -61,4 +61,14 @@ public class HotDealController {
         HotDealDto dto = hotDealService.commentFindById(id);
         return ResponseEntity.ok().body(dto);
     }
+    @PostMapping("/increaseViewCount/{id}")
+    public ResponseEntity<Void> increaseViewCount(@PathVariable("id") Long id) {
+        hotDealService.increaseViewCount(id);
+        return ResponseEntity.ok().build();
+    }
+    @PostMapping("/increaseLikeCount/{id}")
+    public ResponseEntity<Void> increaseLikeCount(@PathVariable("id") Long id) {
+        hotDealService.increaseLikeCount(id);
+        return ResponseEntity.ok().build();
+    }
 }

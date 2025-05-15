@@ -28,7 +28,7 @@ public class HotDeal {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "hotDeal", cascade = CascadeType.ALL,orphanRemoval = true,fetch =  FetchType.LAZY)
+    @OneToMany(mappedBy = "hotDeal", cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
     private List<DealComment> dealComments = new ArrayList<>();
 
     @OneToMany(mappedBy = "hotDeal", cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)

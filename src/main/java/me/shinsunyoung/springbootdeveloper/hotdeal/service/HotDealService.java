@@ -101,4 +101,17 @@ public class HotDealService {
     public List<HotDealAllDto> findAll() {
         return hotDealRepository.findAll().stream().map(HotDealAllDto::fromEntity).toList();
     }
+
+    public void increaseViewCount(Long id) {
+        HotDeal hotDeal = hotDealRepository.findById(id).orElse(null);
+        hotDeal.setViewCount(hotDeal.getViewCount() + 1);
+        hotDealRepository.save(hotDeal);
+
+    }
+
+    public void increaseLikeCount(Long id) {
+        HotDeal hotDeal = hotDealRepository.findById(id).orElse(null);
+        hotDeal.setLikeCount(hotDeal.getLikeCount() + 1);
+        hotDealRepository.save(hotDeal);
+    }
 }
