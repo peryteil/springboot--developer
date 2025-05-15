@@ -41,6 +41,10 @@ public class TokenProvider {
                 .setExpiration(expiry)
                 .setSubject(user.getEmail())
                 .claim("id", user.getId())
+                .claim("name", user.getName())  // 또는 nickname
+                .claim("nickname", user.getNickname())
+                .claim("membership", user.getMembership())
+                .claim("role", user.getRole())
                 .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecretKey())
                 .compact();
     }
@@ -60,10 +64,19 @@ public class TokenProvider {
 
     public Authentication getAuthentication(String token) {
         Claims claims = getClaims(token);
-        Set<SimpleGrantedAuthority> authorities = Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"));
+        Long userId = claims.get("id", Long.class);
+        String email = claims.getSubject();
+        String nickname = claims.get("nickname", String.class);
 
-        return new UsernamePasswordAuthenticationToken(new org.springframework.security.core.userdetails.User(claims.getSubject
-                (), "", authorities), token, authorities);
+        Set<SimpleGrantedAuthority> authorities = Collections.singleton(
+                new SimpleGrantedAuthority("ROLE_USER")
+        );
+
+        return new UsernamePasswordAuthenticationToken(
+                new org.springframework.security.core.userdetails.User(email, "", authorities),
+                token,
+                authorities
+        );
     }
 
     public Long getUserId(String token) {
