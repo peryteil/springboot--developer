@@ -61,6 +61,11 @@ spring:
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
 
+security:
+  jwt:
+    token:
+      expire-length: 14400000 # 4시간 (4 * 60 * 60 * 1000 milliseconds)
+
 jwt:
   issuer: ajufresh@gmail.com
   secret_key: ${JWT_SECRET_KEY}
@@ -74,5 +79,6 @@ cloud:
       bucket: meltique-bucket
     region:
       static: ap-northeast-2
+
   stack:
     auto: false

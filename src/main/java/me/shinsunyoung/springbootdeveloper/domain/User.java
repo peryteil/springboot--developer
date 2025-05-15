@@ -36,13 +36,20 @@ public class User implements UserDetails {
 
     private String providerId; // OAuth2 provider가 제공하는 유니크 ID
 
+    private String name;
+    private String membership;
+    private String role;
+
     @Builder
-    public User(String email, String password, String nickname, String provider, String providerId) {
+    public User(String email, String password, String nickname, String provider, String providerId, String name, String membership) {
         this.email = email;
         this.password = password;
         this.nickname = nickname;
         this.provider = provider;
         this.providerId = providerId;
+        this.name = name;
+        this.membership = membership;
+        this.role = role;
     }
     // 소셜 로그인 전용 생성자
     public static User socialUser(String email, String nickname, String provider, String providerId) {
