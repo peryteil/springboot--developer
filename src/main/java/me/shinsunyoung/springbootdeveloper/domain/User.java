@@ -17,6 +17,7 @@ import java.util.List;
 @Getter
 @Entity
 public class User implements UserDetails {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false)
@@ -33,7 +34,6 @@ public class User implements UserDetails {
 
     private String provider; // google, naver, kakao
 
-
     private String providerId; // OAuth2 provider가 제공하는 유니크 ID
 
     private String name;
@@ -41,29 +41,37 @@ public class User implements UserDetails {
     private String role;
 
     @Builder
-    public User(String email, String password, String nickname, String provider, String providerId, String name, String membership) {
+    public User(String email, String password, String nickname, String provider, String providerId, String name, String membership, String role) {
         this.email = email;
         this.password = password;
-        this.nickname = nickname;
+        this.nickname = (nickname != null && !nickname.isBlank()) ? nickname : generateNickname(email);
         this.provider = provider;
         this.providerId = providerId;
         this.name = name;
         this.membership = membership;
-        this.role = role;
+        this.role = (role != null) ? role : "USER";
     }
+
     // 소셜 로그인 전용 생성자
     public static User socialUser(String email, String nickname, String provider, String providerId) {
         return User.builder()
                 .email(email)
                 .nickname(nickname)
-                .password(null)  // DB가 허용한다면 null 저장
+                .password(null) // DB 허용 시 null 가능
                 .provider(provider)
                 .providerId(providerId)
                 .build();
     }
+
+    // 이메일 기반 닉네임 자동 생성기
+    private static String generateNickname(String email) {
+        if (email == null) return "사용자";
+        return email.split("@")[0];
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("user"));
+        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
     @Override
@@ -75,6 +83,7 @@ public class User implements UserDetails {
     public String getPassword() {
         return password;
     }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;
