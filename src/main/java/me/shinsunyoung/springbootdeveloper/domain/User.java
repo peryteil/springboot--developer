@@ -37,23 +37,37 @@ public class User implements UserDetails {
     @Column(name = "password")
     private String password;
 
+    private String providerId; // OAuth2 provider가 제공하는 유니크 ID
 
-    @Column(name = "provider")
-    private String provider;
+    private String name;
+    private String membership;
+    private String role;
 
-    @Column(name = "provider_id")
-    private String providerId;
+    @Builder
+    public User(String email, String password, String nickname, String provider, String providerId, String name, String membership, String role) {
+        this.email = email;
+        this.password = password;
+        this.nickname = (nickname != null && !nickname.isBlank()) ? nickname : generateNickname(email);
+        this.provider = provider;
+        this.providerId = providerId;
+        this.name = name;
+        this.membership = membership;
+        this.role = (role != null) ? role : "USER";
+    }
 
-    // 소셜 로그인 전용 정적 팩토리 메서드
     public static User socialUser(String email, String nickname, String provider, String providerId) {
         return User.builder()
                 .email(email)
                 .nickname(nickname)
-                .password(null)
+
+               .password(null)
+              .password(null) // DB 허용 시 null 가능
+
                 .provider(provider)
                 .providerId(providerId)
                 .build();
     }
+
 
     public User update(String nickname) {
         this.nickname = nickname;
@@ -61,6 +75,14 @@ public class User implements UserDetails {
     }
 
     // Spring Security UserDetails 구현 메서드들
+
+    // 이메일 기반 닉네임 자동 생성기
+    private static String generateNickname(String email) {
+        if (email == null) return "사용자";
+        return email.split("@")[0];
+    }
+
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_USER"));
@@ -95,4 +117,11 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+
+    public User update(String nickname) {
+        this.nickname = nickname;
+        return this;
+    }
+
 }

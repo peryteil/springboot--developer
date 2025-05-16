@@ -1,56 +1,40 @@
 package me.shinsunyoung.springbootdeveloper.controller;
 
 import lombok.RequiredArgsConstructor;
+import me.shinsunyoung.springbootdeveloper.config.jwt.TokenProvider;
 import me.shinsunyoung.springbootdeveloper.domain.User;
+import me.shinsunyoung.springbootdeveloper.dto.AddUserRequest;
 import me.shinsunyoung.springbootdeveloper.dto.LoginRequest;
-import me.shinsunyoung.springbootdeveloper.dto.SignupRequest;
-import me.shinsunyoung.springbootdeveloper.repository.UserRepository;
+import me.shinsunyoung.springbootdeveloper.service.UserService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
+import java.util.Map;
 
-@RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class UserController {
 
-    private final UserRepository userRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
+    private final UserService userService;
+    private final TokenProvider tokenProvider;
 
-    // ✅ 로그인
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
-        Optional<User> optionalUser = userRepository.findByEmail(request.getEmail());
+        // 1. 사용자 검증
+        User user = userService.login(request.getEmail(), request.getPassword());
 
-        if (optionalUser.isEmpty()) {
-            return ResponseEntity.status(404).body("사용자 없음");
-        }
+        // 2. 토큰 생성
+        String token = tokenProvider.generateToken(user);
 
-        User user = optionalUser.get();
-
-        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            return ResponseEntity.status(401).body("비밀번호 불일치");
-        }
-
-        return ResponseEntity.ok("로그인 성공");
+        // 3. 토큰 반환
+        return ResponseEntity.ok(Map.of("accessToken", token));
     }
 
-    // ✅ 회원가입
-    @PostMapping("/signup")
-    public ResponseEntity<?> signup(@RequestBody SignupRequest request) {
-        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-            return ResponseEntity.status(400).body("이미 가입된 이메일입니다.");
-        }
-
-        User newUser = User.builder()
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .nickname(request.getName())
-                .build();
-
-        userRepository.save(newUser);
-        return ResponseEntity.ok("회원가입 성공");
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody AddUserRequest request) {
+        userService.save(request);
+        return ResponseEntity.ok("회원가입 완료");
     }
 }

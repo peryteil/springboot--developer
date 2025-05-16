@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Setter
 @Getter
 @Entity
 public class RefreshToken {
@@ -19,7 +20,7 @@ public class RefreshToken {
     @Column(name = "user_id", nullable = false, unique = true)
     private Long userId;
 
-    @Column(name = "refresh_token", nullable = false)
+    @Column(name = "refresh_token", nullable = false, length = 512)
     private String refreshToken;
 
     public RefreshToken(Long userId, String refreshToken){
