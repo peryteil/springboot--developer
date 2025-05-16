@@ -2,6 +2,10 @@ package me.shinsunyoung.springbootdeveloper.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,9 +27,16 @@ public class User implements UserDetails {
     @Column(name = "id", updatable = false, nullable = false)
     private Long id;
 
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
-    private String password;
+
+    @Column(name = "nickname")
     private String nickname;
+
+
+    @Column(name = "password")
+    private String password;
+
 
     @Column(name = "provider")
     private String provider;
