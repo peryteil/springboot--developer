@@ -1,12 +1,15 @@
 package me.shinsunyoung.springbootdeveloper.product.service;
 
+import me.shinsunyoung.springbootdeveloper.brand.entity.Brand;
+import me.shinsunyoung.springbootdeveloper.brand.repository.BrandRepository;
 import me.shinsunyoung.springbootdeveloper.config.s3.Image;
 import me.shinsunyoung.springbootdeveloper.config.s3.S3Repository;
 import me.shinsunyoung.springbootdeveloper.config.s3.S3Service;
 import me.shinsunyoung.springbootdeveloper.hotdeal.dto.ImageDto;
-import me.shinsunyoung.springbootdeveloper.product.dto.ProductDto;
+import me.shinsunyoung.springbootdeveloper.product.dto.*;
 import me.shinsunyoung.springbootdeveloper.product.entity.Product;
 import me.shinsunyoung.springbootdeveloper.product.repository.ProductRepository;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,11 +22,13 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final S3Service s3Service;
     private final S3Repository s3Repository;
+    private final BrandRepository brandRepository;
 
-    public ProductService(ProductRepository productRepository, S3Service s3Service, S3Repository s3Repository) {
+    public ProductService(ProductRepository productRepository, S3Service s3Service, S3Repository s3Repository, BrandRepository brandRepository) {
         this.productRepository = productRepository;
         this.s3Service = s3Service;
         this.s3Repository = s3Repository;
+        this.brandRepository = brandRepository;
     }
     @Transactional
     public void save(ProductDto dto, List<MultipartFile> files) {
@@ -35,9 +40,13 @@ public class ProductService {
         product.setExplamationDate(dto.getExplamationDate());
         product.setWeight(dto.getWeight());
         product.setOrigin(dto.getOrigin());
+        product.setCategory(dto.getCategory());
         product.setStock(dto.getStock());
         product.setCreatedAt(LocalDateTime.now());
-
+        if (dto.getBrand() != null) {
+            Brand brand = brandRepository.findByTitle(dto.getBrand());
+            product.setBrand(brand);
+        }
         if (files != null && !files.isEmpty()) {
             for (MultipartFile file : files) {
                 String fileUrl = s3Service.updateFiler(file);
@@ -51,11 +60,11 @@ public class ProductService {
         }
         productRepository.save(product);
     }
-    @Transactional
-    public List<ProductDto> findAllProduct() {
-        return productRepository.findAll().stream().map(ProductDto::new).toList();
+    @Transactional(readOnly = true)
+    public List<ProductFindAll> findAllProduct() {
+        return productRepository.findAll().stream().map(ProductFindAll::new).toList();
     }
-
+    @Transactional
     public void updatePrduct(Long id, ProductDto dto, List<MultipartFile> files) {
         Product product = productRepository.findById(id).orElse(null);
         if (dto.getTitle() != null) {
@@ -74,58 +83,58 @@ public class ProductService {
             product.setContent(dto.getContent());
         }
         if (files != null && !files.isEmpty()) {
-            s3Repository.deleteByProductId(product.getId());
+            s3Service.patchProductFile(product.getId(), files, product);
         }
         product.setUpdatedAt(LocalDateTime.now());
         productRepository.save(product);
-
     }
-    // 기존 이미지 항상 삭제
-//imageRepository.deleteByProductId(product.getId()); // 연관된 이미지 모두 삭제
-
+    @Transactional
     public void deleteById(Long id) {
         productRepository.deleteById(id);
     }
-}
-//@Transactional
-//public void updateProduct(Long id, ProductDto dto, List<MultipartFile> files) {
-//    Product product = productRepository.findById(id)
-//            .orElseThrow(() -> new IllegalArgumentException("상품이 존재하지 않습니다."));
-//
-//    // 필드 업데이트
-//    if (dto.getTitle() != null) product.setTitle(dto.getTitle());
-//    if (dto.getPrice() != null) product.setPrice(dto.getPrice());
-//    if (dto.getMaterials() != null) product.setMaterials(dto.getMaterials());
-//    if (dto.getExplamationDate() != null) product.setExplamationDate(dto.getExplamationDate());
-//    if (dto.getWeight() != null) product.setWeight(dto.getWeight());
-//    if (dto.getOrigin() != null) product.setOrigin(dto.getOrigin());
-//    if (dto.getContent() != null) product.setContent(dto.getContent());
-//    if (dto.getStock() != null) product.setStock(dto.getStock());
-//
-//    // ✅ 이미지 업데이트 (선택: 기존 이미지 삭제)
-//    if (files != null && !files.isEmpty()) {
-//        // 기존 이미지 삭제하고 새로 추가하려면 아래 주석 해제
-//        // imageRepository.deleteByProductId(product.getId());
-//
-//        List<String> urls = s3Service.pacthFile(product.getId(), files);
-//        for (String url : urls) {
-//            Image image = new Image();
-//            image.setFileUrl(url);
-//            image.setProduct(product); // 양방향 연관관계 설정
-//            product.addImage(image);   // helper method 사용
-//            dto.getImageDtos().add(new ImageDto(url)); // DTO에도 반영
-//        }
-//    }
-//
-//    product.setUpdatedAt(LocalDateTime.now());
-//    productRepository.save(product);
-//}
-//public List<String> pacthFile(Long productId, List<MultipartFile> files) {
-//    List<String> urls = new ArrayList<>();
-//    for (MultipartFile file : files) {
-//        String url = updateFiler(file); // 실제 S3 업로드 로직
-//        urls.add(url);
-//    }
-//    return urls;
-//}
 
+    public ProductDto findById(Long id) {
+        Product product = productRepository.findById(id).orElse(null);
+        return ProductDto.fromEntity(product);
+    }
+
+    public List<ProductDto> findByBrandAndCategory(String brand, String category) {
+        List<Product> products;
+
+        if (brand != null && category != null) {
+            products = productRepository.findByBrand_TitleAndCategory(brand, category);
+        } else if (brand != null) {
+            products = productRepository.findByBrand_Title(brand);
+        } else if (category != null) {
+            products = productRepository.findByCategory(category);
+        } else {
+            products = productRepository.findAll();
+        }
+        return products.stream().map(ProductDto::fromEntity).toList();
+    }
+    @Transactional(readOnly = true)
+    public List<ProductFindAll> findAllSimple() {
+        return productRepository.findAllSimple();
+    }
+
+    public List<ProductMain> findByMain() {
+        List<Product> products = productRepository.findTop4ByReviewCount(PageRequest.of(0, 4));
+        return products.stream().map(x -> ProductMain.fromEntity(x)).toList();
+    }
+
+    public List<ProductRelate> findRelatedProduct(Long id) {
+        Product product = productRepository.findById(id).orElse(null);
+        List<Product> result = productRepository.findTop3ByCategoryAndIdNot(product.getCategory(), id);
+        return result.stream().map(ProductRelate::fromEntity).toList();
+    }
+
+    public List<ProBest> findBestProducts() {
+        List<Product> products = productRepository.findTopProductsByReviewCount(PageRequest.of(0, 20));
+        return products.stream().map(ProBest::fromEntity).toList();
+    }
+
+    public List<ProductRelate> findBestpro() {
+        List<Product> products = productRepository.findTopP5ProductsByReviewCount(PageRequest.of(0, 5));
+        return products.stream().map(ProductRelate::fromEntity).toList();
+    }
+}

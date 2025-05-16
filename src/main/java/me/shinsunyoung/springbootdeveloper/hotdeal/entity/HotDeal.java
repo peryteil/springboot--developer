@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import me.shinsunyoung.springbootdeveloper.config.s3.Image;
+import me.shinsunyoung.springbootdeveloper.dealcomment.entity.DealComment;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -12,6 +13,8 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@Table(name = "hot_deal", indexes = {
+        @Index(name = "idx_created_at", columnList = "createdAt")})
 public class HotDeal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,11 +25,15 @@ public class HotDeal {
     private Integer price;
     private String content;
     private Integer viewCount;
+    private String category;
     private Integer likeCount;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "hotDeal", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "hotDeal", cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
+    private List<DealComment> dealComments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "hotDeal", cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
     private List<Image> images = new ArrayList<>();
 
     public void addImage(Image image) {

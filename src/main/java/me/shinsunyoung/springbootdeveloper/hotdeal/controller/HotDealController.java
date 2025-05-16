@@ -1,6 +1,9 @@
 package me.shinsunyoung.springbootdeveloper.hotdeal.controller;
 
+import me.shinsunyoung.springbootdeveloper.dealcomment.dto.DealCommentDto;
+import me.shinsunyoung.springbootdeveloper.hotdeal.dto.HotDealAllDto;
 import me.shinsunyoung.springbootdeveloper.hotdeal.dto.HotDealDto;
+import me.shinsunyoung.springbootdeveloper.hotdeal.dto.HotDealMain;
 import me.shinsunyoung.springbootdeveloper.hotdeal.service.HotDealService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -26,12 +29,19 @@ public class HotDealController {
         hotDealService.createHotDeal(dto, files);
         return ResponseEntity.ok().build();
     }
-
+    //전체 불러오기 핫딜의 모든것 굳이 안쓸듯
     @GetMapping("/findAll")
     public ResponseEntity<List<HotDealDto>> getAllHotDeal(){
         List<HotDealDto> hotDealDtos = hotDealService.findAllHotDeal();
         return ResponseEntity.ok(hotDealDtos);
     }
+    @GetMapping("/findAllList")
+    public ResponseEntity<List<HotDealAllDto>> allHotDeal(){
+        List<HotDealAllDto> hotDealAllDtos = hotDealService.findAll();
+        return ResponseEntity.ok(hotDealAllDtos);
+    }
+
+
 
     @PatchMapping(value = "/update/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> updateHotDeal(
@@ -47,5 +57,31 @@ public class HotDealController {
     public ResponseEntity<Void> deleteById(@PathVariable("id") Long id) {
         hotDealService.deleteById(id);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/findById/{id}")
+    public ResponseEntity<HotDealDto> dealCommentFindById(@PathVariable("id") Long id) {
+        HotDealDto dto = hotDealService.commentFindById(id);
+        return ResponseEntity.ok().body(dto);
+    }
+    @PostMapping("/increaseViewCount/{id}")
+    public ResponseEntity<Void> increaseViewCount(@PathVariable("id") Long id) {
+        hotDealService.increaseViewCount(id);
+        return ResponseEntity.ok().build();
+    }
+    @PostMapping("/increaseLikeCount/{id}")
+    public ResponseEntity<Void> increaseLikeCount(@PathVariable("id") Long id) {
+        hotDealService.increaseLikeCount(id);
+        return ResponseEntity.ok().build();
+    }
+    @GetMapping("/topmain")
+    public ResponseEntity<List<HotDealMain>> getTop3() {
+        List<HotDealMain> mains = hotDealService.getTop4Like();
+        return ResponseEntity.ok().body(mains);
+    }
+    @GetMapping("/top")
+    public ResponseEntity<List<HotDealMain>> getTop5() {
+        List<HotDealMain> mains = hotDealService.getTop5Like();
+        return ResponseEntity.ok().body(mains);
     }
 }
