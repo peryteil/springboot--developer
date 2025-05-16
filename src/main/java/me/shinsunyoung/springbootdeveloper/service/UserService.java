@@ -26,9 +26,14 @@ public class UserService {
     }
 
     public Long save(AddUserRequest dto) {
+        // 이메일 앞부분으로 nickname 자동 생성
+        String nickname = dto.getEmail().split("@")[0];
+
         return userRepository.save(User.builder()
                 .email(dto.getEmail())
                 .password(passwordEncoder.encode(dto.getPassword()))
+                .nickname(nickname)
+                .role("USER")
                 .build()).getId();
     }
 
