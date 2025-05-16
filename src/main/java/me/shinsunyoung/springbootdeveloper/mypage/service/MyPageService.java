@@ -4,12 +4,12 @@ import lombok.RequiredArgsConstructor;
 import me.shinsunyoung.springbootdeveloper.domain.User;
 import me.shinsunyoung.springbootdeveloper.mypage.dto.MyPageUserDto;
 import me.shinsunyoung.springbootdeveloper.mypage.entity.Order;
-import me.shinsunyoung.springbootdeveloper.mypage.entity.Review;
 import me.shinsunyoung.springbootdeveloper.mypage.repository.OrderRepository;
-import me.shinsunyoung.springbootdeveloper.mypage.repository.ReviewRepository;
 import me.shinsunyoung.springbootdeveloper.repository.UserRepository;
+import me.shinsunyoung.springbootdeveloper.review.repository.ReviewRepository;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import me.shinsunyoung.springbootdeveloper.review.entity.Review;
 
 import java.util.List;
 
@@ -30,7 +30,7 @@ public class MyPageService {
                 user.getMembership(),
                 user.getRole(),
                 orderRepository.countByUserId(userId),
-                reviewRepository.countByUserId(userId),
+                reviewRepository.countByUser_Id(userId),
                 0 // 좋아요 수
         );
     }
@@ -40,6 +40,6 @@ public class MyPageService {
     }
 
     public List<Review> getUserReviews(Long userId) {
-        return reviewRepository.findByUserId(userId);
+        return reviewRepository.findByUser_Id(userId);
     }
 }

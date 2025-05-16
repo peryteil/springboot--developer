@@ -1,7 +1,6 @@
 package me.shinsunyoung.springbootdeveloper.domain;
 
 import jakarta.persistence.*;
-import lombok.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,18 +12,15 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
-@Entity
 @Table(name = "users")
-@Getter
-@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@Builder
+@Getter
+@Entity
 public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", updatable = false, nullable = false)
+    @Column(name = "id", updatable = false)
     private Long id;
 
     @Column(name = "email", nullable = false, unique = true)
@@ -33,9 +29,10 @@ public class User implements UserDetails {
     @Column(name = "nickname")
     private String nickname;
 
-
     @Column(name = "password")
     private String password;
+
+    private String provider; // google, naver, kakao
 
     private String providerId; // OAuth2 provider가 제공하는 유니크 ID
 
@@ -55,33 +52,22 @@ public class User implements UserDetails {
         this.role = (role != null) ? role : "USER";
     }
 
+    // 소셜 로그인 전용 생성자
     public static User socialUser(String email, String nickname, String provider, String providerId) {
         return User.builder()
                 .email(email)
                 .nickname(nickname)
-
-               .password(null)
-              .password(null) // DB 허용 시 null 가능
-
+                .password(null) // DB 허용 시 null 가능
                 .provider(provider)
                 .providerId(providerId)
                 .build();
     }
-
-
-    public User update(String nickname) {
-        this.nickname = nickname;
-        return this;
-    }
-
-    // Spring Security UserDetails 구현 메서드들
 
     // 이메일 기반 닉네임 자동 생성기
     private static String generateNickname(String email) {
         if (email == null) return "사용자";
         return email.split("@")[0];
     }
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -90,12 +76,12 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return this.email;
+        return email;
     }
 
     @Override
     public String getPassword() {
-        return this.password;
+        return password;
     }
 
     @Override
@@ -118,10 +104,8 @@ public class User implements UserDetails {
         return true;
     }
 
-
     public User update(String nickname) {
         this.nickname = nickname;
         return this;
     }
-
 }
