@@ -3,6 +3,7 @@ package me.shinsunyoung.springbootdeveloper.hotdeal.controller;
 import me.shinsunyoung.springbootdeveloper.dealcomment.dto.DealCommentDto;
 import me.shinsunyoung.springbootdeveloper.hotdeal.dto.HotDealAllDto;
 import me.shinsunyoung.springbootdeveloper.hotdeal.dto.HotDealDto;
+import me.shinsunyoung.springbootdeveloper.hotdeal.dto.HotDealMain;
 import me.shinsunyoung.springbootdeveloper.hotdeal.service.HotDealService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +41,8 @@ public class HotDealController {
         return ResponseEntity.ok(hotDealAllDtos);
     }
 
+
+
     @PatchMapping(value = "/update/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> updateHotDeal(
             @PathVariable("id") Long id,
@@ -70,5 +73,15 @@ public class HotDealController {
     public ResponseEntity<Void> increaseLikeCount(@PathVariable("id") Long id) {
         hotDealService.increaseLikeCount(id);
         return ResponseEntity.ok().build();
+    }
+    @GetMapping("/topmain")
+    public ResponseEntity<List<HotDealMain>> getTop3() {
+        List<HotDealMain> mains = hotDealService.getTop4Like();
+        return ResponseEntity.ok().body(mains);
+    }
+    @GetMapping("/top")
+    public ResponseEntity<List<HotDealMain>> getTop5() {
+        List<HotDealMain> mains = hotDealService.getTop5Like();
+        return ResponseEntity.ok().body(mains);
     }
 }

@@ -6,10 +6,10 @@ import me.shinsunyoung.springbootdeveloper.config.s3.Image;
 import me.shinsunyoung.springbootdeveloper.config.s3.S3Repository;
 import me.shinsunyoung.springbootdeveloper.config.s3.S3Service;
 import me.shinsunyoung.springbootdeveloper.hotdeal.dto.ImageDto;
-import me.shinsunyoung.springbootdeveloper.product.dto.ProductDto;
-import me.shinsunyoung.springbootdeveloper.product.dto.ProductFindAll;
+import me.shinsunyoung.springbootdeveloper.product.dto.*;
 import me.shinsunyoung.springbootdeveloper.product.entity.Product;
 import me.shinsunyoung.springbootdeveloper.product.repository.ProductRepository;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -117,4 +117,24 @@ public class ProductService {
         return productRepository.findAllSimple();
     }
 
+    public List<ProductMain> findByMain() {
+        List<Product> products = productRepository.findTop4ByReviewCount(PageRequest.of(0, 4));
+        return products.stream().map(x -> ProductMain.fromEntity(x)).toList();
+    }
+
+    public List<ProductRelate> findRelatedProduct(Long id) {
+        Product product = productRepository.findById(id).orElse(null);
+        List<Product> result = productRepository.findTop3ByCategoryAndIdNot(product.getCategory(), id);
+        return result.stream().map(ProductRelate::fromEntity).toList();
+    }
+
+    public List<ProBest> findBestProducts() {
+        List<Product> products = productRepository.findTopProductsByReviewCount(PageRequest.of(0, 20));
+        return products.stream().map(ProBest::fromEntity).toList();
+    }
+
+    public List<ProductRelate> findBestpro() {
+        List<Product> products = productRepository.findTopP5ProductsByReviewCount(PageRequest.of(0, 5));
+        return products.stream().map(ProductRelate::fromEntity).toList();
+    }
 }

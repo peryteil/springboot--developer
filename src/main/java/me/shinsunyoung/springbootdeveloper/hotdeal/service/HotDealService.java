@@ -6,9 +6,12 @@ import me.shinsunyoung.springbootdeveloper.dealcomment.dto.DealCommentDto;
 import me.shinsunyoung.springbootdeveloper.dealcomment.entity.DealComment;
 import me.shinsunyoung.springbootdeveloper.hotdeal.dto.HotDealAllDto;
 import me.shinsunyoung.springbootdeveloper.hotdeal.dto.HotDealDto;
+import me.shinsunyoung.springbootdeveloper.hotdeal.dto.HotDealMain;
 import me.shinsunyoung.springbootdeveloper.hotdeal.dto.ImageDto;
 import me.shinsunyoung.springbootdeveloper.hotdeal.entity.HotDeal;
 import me.shinsunyoung.springbootdeveloper.hotdeal.repository.HotDealRepository;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -102,6 +105,12 @@ public class HotDealService {
         return hotDealRepository.findAll().stream().map(HotDealAllDto::fromEntity).toList();
     }
 
+    @Transactional(readOnly = true)
+    public List<HotDealAllDto> findTop50() {
+        Pageable pageable = PageRequest.of(0, 50);
+        return hotDealRepository.findTop50Dto(pageable);
+    }
+
     public void increaseViewCount(Long id) {
         HotDeal hotDeal = hotDealRepository.findById(id).orElse(null);
         hotDeal.setViewCount(hotDeal.getViewCount() + 1);
@@ -113,5 +122,15 @@ public class HotDealService {
         HotDeal hotDeal = hotDealRepository.findById(id).orElse(null);
         hotDeal.setLikeCount(hotDeal.getLikeCount() + 1);
         hotDealRepository.save(hotDeal);
+    }
+
+    public List<HotDealMain> getTop4Like() {
+        List<HotDeal> hotDeals = hotDealRepository.findTop4ByOrderByLikeCountDesc();
+        return hotDeals.stream().map(HotDealMain::fromEntity).toList();
+    }
+
+    public List<HotDealMain> getTop5Like() {
+        List<HotDeal> hotDeals = hotDealRepository.findTop5ByOrderByLikeCountDesc();
+        return hotDeals.stream().map(HotDealMain::fromEntity).toList();
     }
 }

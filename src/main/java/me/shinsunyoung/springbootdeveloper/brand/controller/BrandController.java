@@ -1,6 +1,7 @@
 package me.shinsunyoung.springbootdeveloper.brand.controller;
 
 import me.shinsunyoung.springbootdeveloper.brand.dto.BrandDto;
+import me.shinsunyoung.springbootdeveloper.brand.dto.BrandMain;
 import me.shinsunyoung.springbootdeveloper.brand.dto.BrandResDto;
 import me.shinsunyoung.springbootdeveloper.brand.service.BrandService;
 import org.springframework.http.ResponseEntity;
@@ -49,6 +50,11 @@ public class BrandController {
         BrandDto dto = brandService.findByid(id);
         return ResponseEntity.ok().body(dto);
     }
+    @GetMapping("/findByMain")
+    public ResponseEntity<List<BrandMain>> findByMain() {
+        List<BrandMain> list = brandService.findMaun();
+        return ResponseEntity.ok().body(list);
+    }
 
     @PatchMapping("/update/{id}")
     public ResponseEntity<Void> updateBrand(
@@ -65,5 +71,6 @@ public class BrandController {
         brandService.deleteById(id);
         return ResponseEntity.ok().build();
     }
+
 
 }

@@ -1,6 +1,7 @@
 package me.shinsunyoung.springbootdeveloper.brand.service;
 
 import me.shinsunyoung.springbootdeveloper.brand.dto.BrandDto;
+import me.shinsunyoung.springbootdeveloper.brand.dto.BrandMain;
 import me.shinsunyoung.springbootdeveloper.brand.dto.BrandResDto;
 import me.shinsunyoung.springbootdeveloper.brand.entity.Brand;
 import me.shinsunyoung.springbootdeveloper.brand.repository.BrandRepository;
@@ -101,5 +102,10 @@ public class BrandService {
     public List<BrandResDto> findBycountry(String country) {
         List<Brand> brands = repository.findByCountry(country);
         return brands.stream().map(BrandResDto::fromEntity).toList();
+    }
+
+    public List<BrandMain> findMaun() {
+        List<Brand> brands = repository.findRandom3Brands();
+        return brands.stream().map(BrandMain::fromEntity).toList();
     }
 }

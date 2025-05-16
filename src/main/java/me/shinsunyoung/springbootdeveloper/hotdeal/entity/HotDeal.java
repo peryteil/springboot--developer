@@ -13,6 +13,8 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@Table(name = "hot_deal", indexes = {
+        @Index(name = "idx_created_at", columnList = "createdAt")})
 public class HotDeal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

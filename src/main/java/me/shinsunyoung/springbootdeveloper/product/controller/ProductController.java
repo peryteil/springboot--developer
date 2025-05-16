@@ -1,7 +1,6 @@
 package me.shinsunyoung.springbootdeveloper.product.controller;
 
-import me.shinsunyoung.springbootdeveloper.product.dto.ProductDto;
-import me.shinsunyoung.springbootdeveloper.product.dto.ProductFindAll;
+import me.shinsunyoung.springbootdeveloper.product.dto.*;
 import me.shinsunyoung.springbootdeveloper.product.service.ProductService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -70,5 +69,27 @@ public class ProductController {
     ) {
         List<ProductDto> result = productService.findByBrandAndCategory(brand, category);
         return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/findByMain")
+    public ResponseEntity<List<ProductMain>> findByMain() {
+        List<ProductMain> list = productService.findByMain();
+        return ResponseEntity.ok().body(list);
+    }
+
+    @GetMapping("/findRelate/{id}")
+    public ResponseEntity<List<ProductRelate>> findRelate(@PathVariable("id") Long id) {
+        List<ProductRelate> productRelates = productService.findRelatedProduct(id);
+        return ResponseEntity.ok().body(productRelates);
+    }
+    @GetMapping("/bestReview")
+    public ResponseEntity<List<ProBest>> bestReview() {
+        List<ProBest> mains = productService.findBestProducts();
+        return ResponseEntity.ok().body(mains);
+    }
+    @GetMapping("/findBest")
+    public ResponseEntity<List<ProductRelate>>findTop5() {
+        List<ProductRelate> productRelates = productService.findBestpro();
+        return ResponseEntity.ok().body(productRelates);
     }
 }
