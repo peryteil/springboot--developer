@@ -26,11 +26,15 @@ public class UserService {
     }
 
     public Long save(AddUserRequest dto) {
+        String email = dto.getEmail();
+        String defaultNickname = email.split("@")[0]; // 이메일 앞부분을 닉네임으로 사용
         return userRepository.save(User.builder()
-                .email(dto.getEmail())
+                .email(email)
                 .password(passwordEncoder.encode(dto.getPassword()))
-                .nickname(dto.getNickname()) // 사용자 입력값 사용
-                .role("USER")
+                .nickname(defaultNickname)
+                .name(defaultNickname) // name도 같이 저장
+                .role("user") // 기본 role 설정
+                .membership("basic") // 기본 membership 설정 가능
                 .build()).getId();
     }
 
