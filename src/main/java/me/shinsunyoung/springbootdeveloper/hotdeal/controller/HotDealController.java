@@ -1,12 +1,14 @@
 package me.shinsunyoung.springbootdeveloper.hotdeal.controller;
 
 import me.shinsunyoung.springbootdeveloper.dealcomment.dto.DealCommentDto;
+import me.shinsunyoung.springbootdeveloper.domain.User;
 import me.shinsunyoung.springbootdeveloper.hotdeal.dto.HotDealAllDto;
 import me.shinsunyoung.springbootdeveloper.hotdeal.dto.HotDealDto;
 import me.shinsunyoung.springbootdeveloper.hotdeal.dto.HotDealMain;
 import me.shinsunyoung.springbootdeveloper.hotdeal.service.HotDealService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,9 +26,10 @@ public class HotDealController {
     @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> insertHotDeal(
             @RequestPart("dto") HotDealDto dto,
-            @RequestPart(value = "files", required = false) List<MultipartFile> files
-    ) {
-        hotDealService.createHotDeal(dto, files);
+            @RequestPart(value = "files", required = false) List<MultipartFile> files,
+            @AuthenticationPrincipal User user
+            ) {
+        hotDealService.createHotDeal(dto, files, user);
         return ResponseEntity.ok().build();
     }
     //전체 불러오기 핫딜의 모든것 굳이 안쓸듯

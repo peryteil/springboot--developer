@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import me.shinsunyoung.springbootdeveloper.config.s3.Image;
 import me.shinsunyoung.springbootdeveloper.dealcomment.entity.DealComment;
+import me.shinsunyoung.springbootdeveloper.domain.User;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -35,7 +36,9 @@ public class HotDeal {
 
     @OneToMany(mappedBy = "hotDeal", cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
     private List<Image> images = new ArrayList<>();
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id" , nullable = false)
+    private User user;
     public void addImage(Image image) {
         if (images == null) {
             images = new ArrayList<>();
