@@ -2,9 +2,12 @@ package me.shinsunyoung.springbootdeveloper.mypage.controller;
 
 import lombok.RequiredArgsConstructor;
 import me.shinsunyoung.springbootdeveloper.config.jwt.TokenProvider;
+import me.shinsunyoung.springbootdeveloper.domain.User;
 import me.shinsunyoung.springbootdeveloper.mypage.dto.MyPageUserDto;
 import me.shinsunyoung.springbootdeveloper.mypage.entity.Order;
 import me.shinsunyoung.springbootdeveloper.mypage.service.MyPageService;
+import me.shinsunyoung.springbootdeveloper.review.entity.Review;
+import me.shinsunyoung.springbootdeveloper.service.UserService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,11 +22,21 @@ import me.shinsunyoung.springbootdeveloper.review.entity.Review;
 public class MyPageController {
     private final MyPageService myPageService;
     private final TokenProvider tokenProvider;
+    private final UserService userService;
 
     @GetMapping("/user")
     public MyPageUserDto getUser(@RequestHeader("Authorization") String authHeader) {
         Long userId = tokenProvider.getUserId(extractToken(authHeader));
-        return myPageService.getUserInfoById(userId);
+        User user = userService.findById(userId); // ✅ 이메일 로그인 사용자도 정보 가져오도록 보장
+
+        return MyPageUserDto.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .email(user.getEmail())
+                .nickname(user.getNickname())
+                .membership(user.getMembership())
+                .role(user.getRole())
+                .build();
     }
 
     @GetMapping("/orders")

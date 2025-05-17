@@ -27,7 +27,7 @@ public class Review {
     private Product product;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id") // ✅ 이 필드 추가
+    @JoinColumn(name = "user_id") // ✅ 이 필드가 반드시 필요
     private User user;
-}
 
+}
