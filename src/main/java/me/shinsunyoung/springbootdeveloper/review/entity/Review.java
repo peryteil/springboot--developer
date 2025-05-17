@@ -19,15 +19,15 @@ public class Review {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Integer rating;
-    private Integer likeCount;
-    private Integer viewCount;
+    private Integer likeCount=0;
+    private Integer viewCount=0;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id") // ✅ 이 필드가 반드시 필요
+    @JoinColumn(name = "user_id")
     private User user;
 
 }

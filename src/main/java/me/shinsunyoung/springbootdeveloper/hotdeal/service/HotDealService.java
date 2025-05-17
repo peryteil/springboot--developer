@@ -4,6 +4,7 @@ import me.shinsunyoung.springbootdeveloper.config.s3.Image;
 import me.shinsunyoung.springbootdeveloper.config.s3.S3Service;
 import me.shinsunyoung.springbootdeveloper.dealcomment.dto.DealCommentDto;
 import me.shinsunyoung.springbootdeveloper.dealcomment.entity.DealComment;
+import me.shinsunyoung.springbootdeveloper.domain.User;
 import me.shinsunyoung.springbootdeveloper.hotdeal.dto.HotDealAllDto;
 import me.shinsunyoung.springbootdeveloper.hotdeal.dto.HotDealDto;
 import me.shinsunyoung.springbootdeveloper.hotdeal.dto.HotDealMain;
@@ -28,8 +29,12 @@ public class HotDealService {
         this.hotDealRepository = hotDealRepository;
     }
     @Transactional
-    public void createHotDeal(HotDealDto dto, List<MultipartFile> files) {
+    public void createHotDeal(HotDealDto dto, List<MultipartFile> files, User user) {
+        if (user == null) {
+            throw new IllegalArgumentException("로그인한 사용자만 핫딜을 등록할수 있습니다");
+        }
         HotDeal hotDeal = new HotDeal();
+        hotDeal.setUser(user);
         hotDeal.setTitle(dto.getTitle());
         hotDeal.setContent(dto.getContent());
         hotDeal.setShopName(dto.getShopName());
