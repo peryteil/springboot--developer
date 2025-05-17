@@ -3,6 +3,7 @@ package me.shinsunyoung.springbootdeveloper.review.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import me.shinsunyoung.springbootdeveloper.domain.User;
 import me.shinsunyoung.springbootdeveloper.product.entity.Product;
 
 import java.time.LocalDateTime;
@@ -24,5 +25,9 @@ public class Review {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id") // ✅ 이 필드가 반드시 필요
+    private User user;
 
 }

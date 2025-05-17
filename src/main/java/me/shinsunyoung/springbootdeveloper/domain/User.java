@@ -36,7 +36,7 @@ public class User implements UserDetails {
 
     @Column(name = "password")
     private String password;
-
+    private String provider;
     private String providerId; // OAuth2 provider가 제공하는 유니크 ID
 
     private String name;
@@ -117,11 +117,4 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
-
-    public User update(String nickname) {
-        this.nickname = nickname;
-        return this;
-    }
-
 }
