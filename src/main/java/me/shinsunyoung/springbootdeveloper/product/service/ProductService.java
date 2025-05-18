@@ -137,7 +137,9 @@ public class ProductService {
     }
     @Transactional(readOnly = true)
     public List<ProductFindAll> findAllSimple() {
-        return productRepository.findAllSimple();
+        return productRepository.findAllSimple().stream()
+                .map(ProductFindAll::fromEntity)
+                .toList();
     }
 
     public List<ProductMain> findByMain() {

@@ -19,23 +19,15 @@ public class ProductFindAll {
     private String title;
     private Integer price;
     private String category;
-    private String brand;
+    private BrandDto brand;
     private List<ImageDto> imageDtos = new ArrayList<>();
-
-    public ProductFindAll(Long id, String title, Integer price, String category, String brand) {
-        this.id = id;
-        this.title = title;
-        this.price = price;
-        this.category = category;
-        this.brand = brand;
-    }
 
     public ProductFindAll(Product product) {
         this.id = product.getId();
         this.title = product.getTitle();
         this.price = product.getPrice();
         this.category = product.getCategory();
-        this.brand = product.getBrand() != null ? product.getBrand().getTitle() : null;
+        this.brand = product.getBrand() != null ? new BrandDto(product.getBrand()) : null;
 
         if (product.getImages() != null) {
             this.imageDtos = product.getImages().stream()
@@ -50,7 +42,7 @@ public class ProductFindAll {
         dto.title = product.getTitle();
         dto.price = product.getPrice();
         dto.category = product.getCategory();
-        dto.brand = product.getBrand() != null ? product.getBrand().getTitle() : null;
+        dto.brand = product.getBrand() != null ? new BrandDto(product.getBrand()) : null;
 
         if (product.getImages() != null) {
             dto.imageDtos = product.getImages().stream()

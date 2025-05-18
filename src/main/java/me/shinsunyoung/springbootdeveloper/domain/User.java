@@ -6,8 +6,10 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import me.shinsunyoung.springbootdeveloper.cart.entity.Cart;
 import me.shinsunyoung.springbootdeveloper.dealcomment.entity.DealComment;
 import me.shinsunyoung.springbootdeveloper.hotdeal.entity.HotDeal;
+import me.shinsunyoung.springbootdeveloper.order.entity.Order;
 import me.shinsunyoung.springbootdeveloper.review.entity.Review;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -53,6 +55,11 @@ public class User implements UserDetails {
     private List<HotDeal> hotDeals = new ArrayList<>();
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DealComment> dealComments = new ArrayList<>();
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Cart> carts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Order> orders = new ArrayList<>();
     @Builder
     public User(String email, String password, String nickname, String provider, String providerId, String name, String membership, String role) {
 
