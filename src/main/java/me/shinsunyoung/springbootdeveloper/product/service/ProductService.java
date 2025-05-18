@@ -45,8 +45,8 @@ public class ProductService {
         product.setCreatedAt(LocalDateTime.now());
 
         // ✅ 브랜드 처리
-        if (dto.getBrand() != null && dto.getBrand().getTitle() != null && !dto.getBrand().getTitle().isBlank()) {
-            String brandTitle = dto.getBrand().getTitle().trim();
+        if (dto.getBrand() != null && !dto.getBrand().isBlank()) {
+            String brandTitle = dto.getBrand().trim();
             Brand brand = brandRepository.findByTitle(brandTitle);
             if (brand == null) {
                 brand = new Brand();

@@ -3,7 +3,6 @@ package me.shinsunyoung.springbootdeveloper.product.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import me.shinsunyoung.springbootdeveloper.brand.dto.BrandDto; // ✅ 올바른 BrandDto import
 import me.shinsunyoung.springbootdeveloper.hotdeal.dto.ImageDto;
 import me.shinsunyoung.springbootdeveloper.product.entity.Product;
 import me.shinsunyoung.springbootdeveloper.review.dto.ReviewDto;
@@ -27,7 +26,7 @@ public class ProductDto {
     private String origin;
     private Integer stock;
     private String content;
-    private BrandDto brand; // ✅ BrandDto로 수정
+    private String brand; // ✅ BrandDto → String
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private List<ImageDto> imageDtos = new ArrayList<>();
@@ -50,7 +49,7 @@ public class ProductDto {
         this.updatedAt = product.getUpdatedAt();
 
         if (product.getBrand() != null) {
-            this.brand = new BrandDto(product.getBrand().getId(), product.getBrand().getTitle()); // ✅ 정상 생성자 사용
+            this.brand = product.getBrand().getTitle(); // ✅ 문자열만 저장
         }
 
         this.imageDtos = product.getImages().stream()
@@ -89,7 +88,7 @@ public class ProductDto {
         dto.content = product.getContent();
 
         if (product.getBrand() != null) {
-            dto.brand = new BrandDto(product.getBrand().getId(), product.getBrand().getTitle()); // ✅ 생성자 문제 해결
+            dto.brand = product.getBrand().getTitle(); // ✅ 문자열만 저장
         }
 
         dto.createdAt = product.getCreatedAt();
