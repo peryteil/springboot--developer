@@ -15,8 +15,8 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
     List<Product> findByBrand_TitleAndCategory(String brand, String category);
     List<Product> findByBrand_Title(String brand);
     List<Product> findByCategory(String category);
-    @Query("SELECT p FROM Product p LEFT JOIN FETCH p.brand b LEFT JOIN FETCH p.images")
-    List<ProductFindAll> findAllSimple();
+    @Query("SELECT DISTINCT p FROM Product p LEFT JOIN FETCH p.brand b LEFT JOIN FETCH p.images")
+    List<Product> findAllSimple();
     @Query("SELECT p FROM Product p LEFT JOIN p.reviews r GROUP BY p ORDER BY COUNT(r) DESC")
     List<Product> findTop4ByReviewCount(PageRequest pageable);
     List<Product> findTop3ByCategoryAndIdNot(String category, Long id);

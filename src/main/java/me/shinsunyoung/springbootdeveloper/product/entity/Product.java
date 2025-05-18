@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import me.shinsunyoung.springbootdeveloper.brand.entity.Brand;
+import me.shinsunyoung.springbootdeveloper.cart.entity.Cart;
 import me.shinsunyoung.springbootdeveloper.config.s3.Image;
+import me.shinsunyoung.springbootdeveloper.orderdetail.entity.OrderDetail;
 import me.shinsunyoung.springbootdeveloper.review.entity.Review;
 
 import java.time.LocalDateTime;
@@ -38,6 +40,11 @@ public class Product {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "brand_id")
     private Brand brand;
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Cart> carts = new ArrayList<>();
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<OrderDetail> details = new ArrayList<>();
+
     public void addImage(Image image) {
 
         if (image == null) {

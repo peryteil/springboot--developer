@@ -43,6 +43,7 @@ public class MyPageController {
     public List<Order> getOrders(@RequestHeader("Authorization") String authHeader) {
         Long userId = tokenProvider.getUserId(extractToken(authHeader));
         return myPageService.getUserOrders(userId);
+
     }
 
     @GetMapping("/reviews")
