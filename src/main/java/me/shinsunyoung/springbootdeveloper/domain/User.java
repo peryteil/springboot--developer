@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import me.shinsunyoung.springbootdeveloper.dealcomment.entity.DealComment;
 import me.shinsunyoung.springbootdeveloper.hotdeal.entity.HotDeal;
 import me.shinsunyoung.springbootdeveloper.review.entity.Review;
 import org.springframework.security.core.GrantedAuthority;
@@ -50,9 +51,11 @@ public class User implements UserDetails {
     private List<Review> reviews = new ArrayList<>();
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<HotDeal> hotDeals = new ArrayList<>();
-
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DealComment> dealComments = new ArrayList<>();
     @Builder
     public User(String email, String password, String nickname, String provider, String providerId, String name, String membership, String role) {
+
         this.email = email;
         this.password = password;
         this.nickname = (nickname != null && !nickname.isBlank()) ? nickname : generateNickname(email);

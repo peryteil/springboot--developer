@@ -11,6 +11,7 @@ import me.shinsunyoung.springbootdeveloper.hotdeal.dto.HotDealMain;
 import me.shinsunyoung.springbootdeveloper.hotdeal.dto.ImageDto;
 import me.shinsunyoung.springbootdeveloper.hotdeal.entity.HotDeal;
 import me.shinsunyoung.springbootdeveloper.hotdeal.repository.HotDealRepository;
+import me.shinsunyoung.springbootdeveloper.repository.UserRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -23,13 +24,17 @@ import java.util.List;
 public class HotDealService {
     private final S3Service s3Service;
     private final HotDealRepository hotDealRepository;
+    private final UserRepository userRepository;
 
-    public HotDealService(S3Service s3Service, HotDealRepository hotDealRepository) {
+
+    public HotDealService(S3Service s3Service, HotDealRepository hotDealRepository, UserRepository userRepository, UserRepository userRepository1) {
         this.s3Service = s3Service;
         this.hotDealRepository = hotDealRepository;
+        this.userRepository = userRepository1;
     }
     @Transactional
-    public void createHotDeal(HotDealDto dto, List<MultipartFile> files, User user) {
+    public void createHotDeal(HotDealDto dto, List<MultipartFile> files, Long userId) {
+        User user = userRepository.findById(userId).orElse(null);
         if (user == null) {
             throw new IllegalArgumentException("로그인한 사용자만 핫딜을 등록할수 있습니다");
         }
@@ -101,10 +106,10 @@ public class HotDealService {
         HotDeal hotDeal = hotDealRepository.findById(id).orElse(null);
         return HotDealDto.fromEntity(hotDeal);
     }
-
     public HotDeal findById(Long id) {
         return hotDealRepository.findById(id).orElse(null);
     }
+
     @Transactional(readOnly = true)
     public List<HotDealAllDto> findAll() {
         return hotDealRepository.findAll().stream().map(HotDealAllDto::fromEntity).toList();
