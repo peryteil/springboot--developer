@@ -45,15 +45,16 @@ public class ProductService {
         product.setCreatedAt(LocalDateTime.now());
 
         // ✅ 브랜드 처리
-        if (dto.getBrand() != null && !dto.getBrand().isBlank()) {
-            Brand brand = brandRepository.findByTitle(dto.getBrand().trim());
+        if (dto.getBrand() != null && dto.getBrand().getTitle() != null && !dto.getBrand().getTitle().isBlank()) {
+            String brandTitle = dto.getBrand().getTitle().trim();
+            Brand brand = brandRepository.findByTitle(brandTitle);
             if (brand == null) {
                 brand = new Brand();
-                brand.setTitle(dto.getBrand().trim());
+                brand.setTitle(brandTitle);
                 brand.setCreatedAt(LocalDateTime.now());
 
-                // ✅ 필수값 기본 세팅
-                brand.setFounded(0); // 예: 미입력 시 0년
+                // 기본값 설정
+                brand.setFounded(0);
                 brand.setContent("내용 없음");
                 brand.setOffice("미정");
                 brand.setCountry("미정");

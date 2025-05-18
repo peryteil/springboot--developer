@@ -1,6 +1,5 @@
 package me.shinsunyoung.springbootdeveloper.brand.service;
 
-import me.shinsunyoung.springbootdeveloper.brand.dto.BrandDto;
 import me.shinsunyoung.springbootdeveloper.brand.dto.BrandMain;
 import me.shinsunyoung.springbootdeveloper.brand.dto.BrandResDto;
 import me.shinsunyoung.springbootdeveloper.brand.entity.Brand;
@@ -8,6 +7,7 @@ import me.shinsunyoung.springbootdeveloper.brand.repository.BrandRepository;
 import me.shinsunyoung.springbootdeveloper.config.s3.Image;
 import me.shinsunyoung.springbootdeveloper.config.s3.S3Service;
 import me.shinsunyoung.springbootdeveloper.hotdeal.dto.ImageDto;
+import me.shinsunyoung.springbootdeveloper.product.dto.ProductFindAll;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,7 +26,7 @@ public class BrandService {
     }
 
     @Transactional
-    public void saveBrand(BrandDto dto, List<MultipartFile> files) {
+    public void saveBrand(ProductFindAll.BrandDto dto, List<MultipartFile> files) {
         Brand brand = new Brand();
         brand.setTitle(dto.getTitle());
         brand.setContent(dto.getContent());
@@ -52,16 +52,16 @@ public class BrandService {
         repository.save(brand);
     }
     @Transactional
-    public List<BrandDto> findAll() {
-        return repository.findAll().stream().map(BrandDto::new).toList();
+    public List<ProductFindAll.BrandDto> findAll() {
+        return repository.findAll().stream().map(ProductFindAll.BrandDto::new).toList();
     }
     @Transactional
-    public BrandDto findByid(Long id) {
+    public ProductFindAll.BrandDto findByid(Long id) {
         Brand brand = repository.findById(id).orElse(null);
-        return BrandDto.fromEntity(brand);
+        return ProductFindAll.BrandDto.fromEntity(brand);
     }
     @Transactional
-    public void updateBrand(Long id, BrandDto dto, List<MultipartFile> files) {
+    public void updateBrand(Long id, ProductFindAll.BrandDto dto, List<MultipartFile> files) {
         Brand brand = repository.findById(id).orElse(null);
         if (dto.getTitle() != null) {
             brand.setTitle(dto.getTitle());
