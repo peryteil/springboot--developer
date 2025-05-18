@@ -1,23 +1,21 @@
-package me.shinsunyoung.springbootdeveloper.mypage.entity;
+package me.shinsunyoung.springbootdeveloper.mypage.dto;
 
-import jakarta.persistence.*;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.shinsunyoung.springbootdeveloper.domain.User;
 
-@Entity
-@Table(name = "orders")
 @Getter
 @NoArgsConstructor
-public class Order {
+public class MyOrder {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Long id;
-
     private String productName;
     private String status;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
     private User user;
 }

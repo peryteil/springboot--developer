@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import me.shinsunyoung.springbootdeveloper.config.jwt.TokenProvider;
 import me.shinsunyoung.springbootdeveloper.domain.User;
 import me.shinsunyoung.springbootdeveloper.mypage.dto.MyPageUserDto;
-import me.shinsunyoung.springbootdeveloper.mypage.entity.Order;
+import me.shinsunyoung.springbootdeveloper.mypage.entity.MyOrder;
 import me.shinsunyoung.springbootdeveloper.mypage.service.MyPageService;
 import me.shinsunyoung.springbootdeveloper.review.entity.Review;
 import me.shinsunyoung.springbootdeveloper.service.UserService;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import me.shinsunyoung.springbootdeveloper.review.entity.Review;
 
 @RestController
 @RequestMapping("/api")
@@ -40,7 +39,7 @@ public class MyPageController {
     }
 
     @GetMapping("/orders")
-    public List<Order> getOrders(@RequestHeader("Authorization") String authHeader) {
+    public List<MyOrder> getOrders(@RequestHeader("Authorization") String authHeader) {
         Long userId = tokenProvider.getUserId(extractToken(authHeader));
         return myPageService.getUserOrders(userId);
 
