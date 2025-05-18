@@ -43,10 +43,31 @@ public class ProductService {
         product.setCategory(dto.getCategory());
         product.setStock(dto.getStock());
         product.setCreatedAt(LocalDateTime.now());
-        if (dto.getBrand() != null) {
-            Brand brand = brandRepository.findByTitle(dto.getBrand());
+
+        // ✅ 브랜드 처리
+        if (dto.getBrand() != null && !dto.getBrand().isBlank()) {
+            Brand brand = brandRepository.findByTitle(dto.getBrand().trim());
+            if (brand == null) {
+                brand = new Brand();
+                brand.setTitle(dto.getBrand().trim());
+                brand.setCreatedAt(LocalDateTime.now());
+
+                // ✅ 필수값 기본 세팅
+                brand.setFounded(0); // 예: 미입력 시 0년
+                brand.setContent("내용 없음");
+                brand.setOffice("미정");
+                brand.setCountry("미정");
+                brand.setRepresentative("미정");
+                brand.setWebSite("미정");
+                brand.setIntroduction("소개 없음");
+                brand.setHistory("히스토리 없음");
+
+                brandRepository.save(brand);
+            }
             product.setBrand(brand);
         }
+
+        // ✅ 이미지 처리
         if (files != null && !files.isEmpty()) {
             for (MultipartFile file : files) {
                 String fileUrl = s3Service.updateFiler(file);
@@ -56,8 +77,9 @@ public class ProductService {
                 dto.getImageDtos().add(new ImageDto(fileUrl));
             }
         } else {
-            System.out.printf("이미지 없이 저장됨");
+            System.out.println("이미지 없이 저장됨");
         }
+
         productRepository.save(product);
     }
     @Transactional(readOnly = true)

@@ -66,7 +66,7 @@ public class ProductDto {
         dto.stock = product.getStock();
         dto.content = product.getContent();
         if (product.getBrand() != null) {
-            dto.brand = product.getBrand().getTitle();
+            dto.brand = product.getBrand() != null ? product.getBrand().getTitle() : null;
         } else {
             dto.brand = "브랜드 없음";
         }

@@ -1,12 +1,9 @@
 package me.shinsunyoung.springbootdeveloper.product.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import me.shinsunyoung.springbootdeveloper.hotdeal.dto.ImageDto;
 import me.shinsunyoung.springbootdeveloper.product.entity.Product;
-import me.shinsunyoung.springbootdeveloper.review.dto.ReviewDto;
-import me.shinsunyoung.springbootdeveloper.review.entity.Review;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +11,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 public class ProductFindAll {
+
     private Long id;
     private String title;
     private Integer price;
@@ -29,26 +27,18 @@ public class ProductFindAll {
         this.brand = brand;
     }
 
-
     public ProductFindAll(Product product) {
         this.id = product.getId();
         this.title = product.getTitle();
         this.price = product.getPrice();
         this.category = product.getCategory();
+        this.brand = product.getBrand() != null ? product.getBrand().getTitle() : "브랜드 없음";
 
-        // 브랜드 null 체크
-        if (product.getBrand() != null) {
-            this.brand = product.getBrand().getTitle();
-        } else {
-            this.brand = "브랜드 없음"; // 또는 null, "" 등 상황에 따라 조절
-        }
         if (product.getImages() != null) {
             this.imageDtos = product.getImages().stream()
-                    .map(ImageDto::fromEntity)
+                    .map(img -> new ImageDto(img.getFileUrl()))
                     .toList();
         }
-
-
     }
 
     public static ProductFindAll fromEntity(Product product) {
@@ -57,9 +47,14 @@ public class ProductFindAll {
         dto.title = product.getTitle();
         dto.price = product.getPrice();
         dto.category = product.getCategory();
-        dto.brand = product.getBrand().getTitle();
-        dto.imageDtos = product.getImages().stream().map(x -> new ImageDto(x.getFileUrl())).toList();
+        dto.brand = product.getBrand() != null ? product.getBrand().getTitle() : "브랜드 없음";
+
+        if (product.getImages() != null) {
+            dto.imageDtos = product.getImages().stream()
+                    .map(img -> new ImageDto(img.getFileUrl()))
+                    .toList();
+        }
+
         return dto;
     }
 }
-

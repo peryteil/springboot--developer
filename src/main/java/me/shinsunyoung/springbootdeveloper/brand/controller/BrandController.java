@@ -11,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @RestController
-@RequestMapping("/brand")
+@RequestMapping("/api/brand")
 public class BrandController {
     private final BrandService brandService;
 
@@ -71,6 +71,5 @@ public class BrandController {
         brandService.deleteById(id);
         return ResponseEntity.ok().build();
     }
-
 
 }
