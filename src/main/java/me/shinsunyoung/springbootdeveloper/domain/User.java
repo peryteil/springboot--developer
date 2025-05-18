@@ -51,7 +51,6 @@ public class User implements UserDetails {
     private List<Review> reviews = new ArrayList<>();
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<HotDeal> hotDeals = new ArrayList<>();
-
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DealComment> dealComments = new ArrayList<>();
     @Builder

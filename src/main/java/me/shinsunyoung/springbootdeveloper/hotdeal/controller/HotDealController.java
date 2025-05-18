@@ -1,5 +1,6 @@
 package me.shinsunyoung.springbootdeveloper.hotdeal.controller;
 
+import me.shinsunyoung.springbootdeveloper.dealcomment.dto.DealCommentDto;
 import me.shinsunyoung.springbootdeveloper.domain.User;
 import me.shinsunyoung.springbootdeveloper.hotdeal.dto.HotDealAllDto;
 import me.shinsunyoung.springbootdeveloper.hotdeal.dto.HotDealDto;
@@ -21,7 +22,7 @@ public class HotDealController {
     private final HotDealService hotDealService;
     private final UserRepository userRepository;
 
-    public HotDealController(HotDealService hotDealService, UserRepository userRepository, UserRepository userRepository1) {
+    public HotDealController(HotDealService hotDealService, UserRepository userRepository1) {
         this.hotDealService = hotDealService;
         this.userRepository = userRepository1;
     }

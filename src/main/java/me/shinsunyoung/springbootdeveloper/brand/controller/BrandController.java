@@ -1,9 +1,9 @@
 package me.shinsunyoung.springbootdeveloper.brand.controller;
 
-import me.shinsunyoung.springbootdeveloper.brand.dto.BrandDto;
 import me.shinsunyoung.springbootdeveloper.brand.dto.BrandMain;
 import me.shinsunyoung.springbootdeveloper.brand.dto.BrandResDto;
 import me.shinsunyoung.springbootdeveloper.brand.service.BrandService;
+import me.shinsunyoung.springbootdeveloper.product.dto.ProductFindAll;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -11,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @RestController
-@RequestMapping("/brand")
+@RequestMapping("/api/brand")
 public class BrandController {
     private final BrandService brandService;
 
@@ -21,7 +21,7 @@ public class BrandController {
 
     @PostMapping("/create")
     public ResponseEntity<Void> createBrand(
-            @RequestPart("dto") BrandDto dto,
+            @RequestPart("dto") ProductFindAll.BrandDto dto,
             @RequestPart(value = "files", required = false) List<MultipartFile> files
     ) {
         brandService.saveBrand(dto, files);
@@ -40,14 +40,14 @@ public class BrandController {
     }
 
     @GetMapping("/findAll")
-    public ResponseEntity<List<BrandDto>> findAllBrand() {
-        List<BrandDto> brandDtos = brandService.findAll();
+    public ResponseEntity<List<ProductFindAll.BrandDto>> findAllBrand() {
+        List<ProductFindAll.BrandDto> brandDtos = brandService.findAll();
         return ResponseEntity.ok().body(brandDtos);
     }
 
     @GetMapping("/findById/{id}")
-    public ResponseEntity<BrandDto> findById(@PathVariable("id") Long id) {
-        BrandDto dto = brandService.findByid(id);
+    public ResponseEntity<ProductFindAll.BrandDto> findById(@PathVariable("id") Long id) {
+        ProductFindAll.BrandDto dto = brandService.findByid(id);
         return ResponseEntity.ok().body(dto);
     }
     @GetMapping("/findByMain")
@@ -59,7 +59,7 @@ public class BrandController {
     @PatchMapping("/update/{id}")
     public ResponseEntity<Void> updateBrand(
             @PathVariable("id") Long id,
-            @RequestPart("dto") BrandDto dto,
+            @RequestPart("dto") ProductFindAll.BrandDto dto,
             @RequestPart(value = "files", required = false) List<MultipartFile> files
     ) {
         brandService.updateBrand(id, dto, files);
@@ -71,6 +71,4 @@ public class BrandController {
         brandService.deleteById(id);
         return ResponseEntity.ok().build();
     }
-
-
 }
