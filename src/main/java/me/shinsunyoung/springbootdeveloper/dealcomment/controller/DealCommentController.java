@@ -4,6 +4,8 @@ import me.shinsunyoung.springbootdeveloper.dealcomment.entity.DealComment;
 import me.shinsunyoung.springbootdeveloper.dealcomment.service.DealCommentService;
 import me.shinsunyoung.springbootdeveloper.hotdeal.entity.HotDeal;
 import me.shinsunyoung.springbootdeveloper.hotdeal.service.HotDealService;
+import me.shinsunyoung.springbootdeveloper.repository.UserRepository;
+import me.shinsunyoung.springbootdeveloper.service.CustomUserDetails;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,7 +19,7 @@ public class DealCommentController {
     private final DealCommentService dealCommentService;
     private final HotDealService hotDealService;
 
-    public DealCommentController(DealCommentService dealCommentService, HotDealService hotDealService) {
+    public DealCommentController(DealCommentService dealCommentService, HotDealService hotDealService, UserRepository userRepository) {
         this.dealCommentService = dealCommentService;
         this.hotDealService = hotDealService;
     }
@@ -25,9 +27,11 @@ public class DealCommentController {
     @PostMapping("/create/{id}")
     public ResponseEntity<Void> createComment(
             @PathVariable("id") Long id,
-            @RequestParam("comment") String content
+            @RequestParam("comment") String content,
+            @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        dealCommentService.createComment(id, content);
+        Long userId = userDetails.getUserId();
+        dealCommentService.createComment(id, content,userId);
         return ResponseEntity.ok().build();
     }
 

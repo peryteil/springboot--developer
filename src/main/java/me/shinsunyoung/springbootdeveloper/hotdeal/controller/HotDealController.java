@@ -1,11 +1,12 @@
 package me.shinsunyoung.springbootdeveloper.hotdeal.controller;
 
-import me.shinsunyoung.springbootdeveloper.dealcomment.dto.DealCommentDto;
 import me.shinsunyoung.springbootdeveloper.domain.User;
 import me.shinsunyoung.springbootdeveloper.hotdeal.dto.HotDealAllDto;
 import me.shinsunyoung.springbootdeveloper.hotdeal.dto.HotDealDto;
 import me.shinsunyoung.springbootdeveloper.hotdeal.dto.HotDealMain;
 import me.shinsunyoung.springbootdeveloper.hotdeal.service.HotDealService;
+import me.shinsunyoung.springbootdeveloper.repository.UserRepository;
+import me.shinsunyoung.springbootdeveloper.service.CustomUserDetails;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,18 +19,23 @@ import java.util.List;
 @RequestMapping("/hotDeal")
 public class HotDealController {
     private final HotDealService hotDealService;
+    private final UserRepository userRepository;
 
-    public HotDealController(HotDealService hotDealService) {
+    public HotDealController(HotDealService hotDealService, UserRepository userRepository, UserRepository userRepository1) {
         this.hotDealService = hotDealService;
+        this.userRepository = userRepository1;
     }
 
     @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> insertHotDeal(
             @RequestPart("dto") HotDealDto dto,
             @RequestPart(value = "files", required = false) List<MultipartFile> files,
-            @AuthenticationPrincipal User user
+            @AuthenticationPrincipal CustomUserDetails userDetails
             ) {
-        hotDealService.createHotDeal(dto, files, user);
+        Long userId = userDetails.getUserId();
+        User user = userRepository.findById(userId).orElse(null);
+        System.out.printf(user.getEmail() + "==========================================");
+        hotDealService.createHotDeal(dto, files, userId );
         return ResponseEntity.ok().build();
     }
     //전체 불러오기 핫딜의 모든것 굳이 안쓸듯

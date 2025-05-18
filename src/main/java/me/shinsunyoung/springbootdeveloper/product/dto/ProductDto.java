@@ -33,7 +33,7 @@ public class ProductDto {
     private List<ImageDto> imageDtos = new ArrayList<>();
     private List<ReviewDto> reviewDtos = new ArrayList<>();
     private Double averageRating;
-    private int reviewCount;
+    private Integer reviewCount;
 
 
     public ProductDto(Product product) {

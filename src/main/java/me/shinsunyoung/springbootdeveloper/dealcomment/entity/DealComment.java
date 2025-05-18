@@ -3,6 +3,7 @@ package me.shinsunyoung.springbootdeveloper.dealcomment.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import me.shinsunyoung.springbootdeveloper.domain.User;
 import me.shinsunyoung.springbootdeveloper.hotdeal.entity.HotDeal;
 import org.springframework.cglib.core.Local;
 
@@ -21,6 +22,9 @@ public class DealComment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hot_deal_id")
     private HotDeal hotDeal;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
 
 }

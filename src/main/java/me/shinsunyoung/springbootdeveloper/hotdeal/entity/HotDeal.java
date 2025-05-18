@@ -25,9 +25,9 @@ public class HotDeal {
     private String shopLink;
     private Integer price;
     private String content;
-    private Integer viewCount;
+    private Integer viewCount=0;
     private String category;
-    private Integer likeCount;
+    private Integer likeCount=0;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 

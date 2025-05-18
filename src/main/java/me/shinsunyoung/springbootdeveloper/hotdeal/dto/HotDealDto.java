@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import me.shinsunyoung.springbootdeveloper.dealcomment.dto.DealCommentDto;
 import me.shinsunyoung.springbootdeveloper.dealcomment.entity.DealComment;
+import me.shinsunyoung.springbootdeveloper.domain.User;
+import me.shinsunyoung.springbootdeveloper.domain.UserDto;
 import me.shinsunyoung.springbootdeveloper.hotdeal.entity.HotDeal;
 
 import java.time.LocalDateTime;
@@ -27,6 +29,7 @@ public class HotDealDto {
     private Integer viewCount;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private UserDto userDto;
     private List<ImageDto> imageDtos = new ArrayList<>();
     private List<DealCommentDto> dtos = new ArrayList<>();
 
@@ -61,6 +64,7 @@ public class HotDealDto {
         dto.content = hotDeal.getContent();
         dto.createdAt = hotDeal.getCreatedAt();
         dto.updatedAt = hotDeal.getUpdatedAt();
+        dto.userDto = new UserDto(hotDeal.getUser());
         dto.dtos = hotDeal.getDealComments().stream().map(DealCommentDto::new).toList();
         dto.imageDtos = hotDeal.getImages().stream().map(img -> new ImageDto(img.getFileUrl())).toList();
         return dto;
