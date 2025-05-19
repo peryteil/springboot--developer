@@ -1,5 +1,6 @@
 package me.shinsunyoung.springbootdeveloper.order.service;
 
+<<<<<<< HEAD
 import lombok.RequiredArgsConstructor;
 import me.shinsunyoung.springbootdeveloper.mypage.repository.OrderRepository;
 import me.shinsunyoung.springbootdeveloper.order.entity.Member;
@@ -129,4 +130,10 @@ public class OrderService {
         }
     }
 
+=======
+import org.springframework.stereotype.Service;
+
+@Service
+public class OrderService {
+>>>>>>> 0afc4affaca180f6f4bd38488f3cf703416ceaf1
 }

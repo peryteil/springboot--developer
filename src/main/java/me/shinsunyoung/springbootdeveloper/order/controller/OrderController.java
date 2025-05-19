@@ -1,5 +1,6 @@
 package me.shinsunyoung.springbootdeveloper.order.controller;
 
+<<<<<<< HEAD
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import me.shinsunyoung.springbootdeveloper.order.entity.Orders;
@@ -66,3 +67,13 @@ public class OrderController {
     }
 
 }
+=======
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/api/order")
+public class OrderController {
+}
+>>>>>>> 0afc4affaca180f6f4bd38488f3cf703416ceaf1

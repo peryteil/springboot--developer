@@ -1,5 +1,6 @@
 package me.shinsunyoung.springbootdeveloper.order.entity;
 
+<<<<<<< HEAD
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -65,4 +66,7 @@ public class PaymentHistory {
     public void setReview(Boolean review) {
         this.review = review;
     }
+=======
+public class PaymentHistory {
+>>>>>>> 0afc4affaca180f6f4bd38488f3cf703416ceaf1
 }
