@@ -5,6 +5,7 @@ import me.shinsunyoung.springbootdeveloper.mypage.repository.OrderRepository;
 import me.shinsunyoung.springbootdeveloper.order.entity.Member;
 import me.shinsunyoung.springbootdeveloper.order.entity.Orders;
 import me.shinsunyoung.springbootdeveloper.order.entity.PaymentHistory;
+import me.shinsunyoung.springbootdeveloper.order.entity.ProductManagement;
 import me.shinsunyoung.springbootdeveloper.order.repository.MemberRepositoryV1;
 import me.shinsunyoung.springbootdeveloper.order.repository.PaymentRepository;
 import me.shinsunyoung.springbootdeveloper.order.repository.ProductManagementRepository;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import me.shinsunyoung.springbootdeveloper.order.dto.PaymentRequestDto;
 
 @Service
 @RequiredArgsConstructor

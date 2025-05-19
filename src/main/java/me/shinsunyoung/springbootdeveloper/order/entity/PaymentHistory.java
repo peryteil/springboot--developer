@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import me.shinsunyoung.springbootdeveloper.product.entity.Product;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @Setter

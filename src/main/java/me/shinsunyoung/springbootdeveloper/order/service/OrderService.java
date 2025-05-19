@@ -2,11 +2,16 @@ package me.shinsunyoung.springbootdeveloper.order.service;
 
 import lombok.RequiredArgsConstructor;
 import me.shinsunyoung.springbootdeveloper.mypage.repository.OrderRepository;
+import me.shinsunyoung.springbootdeveloper.order.entity.Member;
 import me.shinsunyoung.springbootdeveloper.order.entity.Orders;
+import me.shinsunyoung.springbootdeveloper.order.entity.ProductManagement;
+import me.shinsunyoung.springbootdeveloper.order.repository.MemberRepositoryV1;
 import me.shinsunyoung.springbootdeveloper.product.entity.Product;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -117,6 +122,11 @@ public class OrderService {
 
         // 무작위 문자열과 현재 날짜/시간을 조합하여 주문번호 생성
         return formattedDay +'-'+ uniqueString;
+    }
+    private void verifyUserIdMatch(Long memberId) {
+        if (memberId == null) {
+            throw new IllegalArgumentException("사용자 정보가 유효하지 않습니다.");
+        }
     }
 
 }

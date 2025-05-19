@@ -33,6 +33,8 @@ public class ProductFindAll {
             this.imageDtos = product.getImages().stream()
                     .map(img -> new ImageDto(img.getFileUrl()))
                     .toList();
+
+
         }
     }
 
