@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-public class OrderDetail {
+public class MyOrderDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long OrderDetKey; // 주문 상세번호

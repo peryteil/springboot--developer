@@ -1,12 +1,14 @@
 package me.shinsunyoung.springbootdeveloper.order.service;
 
 import lombok.RequiredArgsConstructor;
-import me.shinsunyoung.springbootdeveloper.mypage.repository.OrderRepository;
-import me.shinsunyoung.springbootdeveloper.order.entity.Member;
+import me.shinsunyoung.springbootdeveloper.domain.User;
+import me.shinsunyoung.springbootdeveloper.order.dto.PaymentHistoryDto;
+import me.shinsunyoung.springbootdeveloper.repository.UserRepository;
+import me.shinsunyoung.springbootdeveloper.order.repository.OrderRepository;
+import me.shinsunyoung.springbootdeveloper.order.dto.PaymentRequestDto;
 import me.shinsunyoung.springbootdeveloper.order.entity.Orders;
 import me.shinsunyoung.springbootdeveloper.order.entity.PaymentHistory;
 import me.shinsunyoung.springbootdeveloper.order.entity.ProductManagement;
-import me.shinsunyoung.springbootdeveloper.order.repository.MemberRepositoryV1;
 import me.shinsunyoung.springbootdeveloper.order.repository.PaymentRepository;
 import me.shinsunyoung.springbootdeveloper.order.repository.ProductManagementRepository;
 import me.shinsunyoung.springbootdeveloper.product.entity.Product;
@@ -15,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import me.shinsunyoung.springbootdeveloper.order.dto.PaymentRequestDto;
 
 @Service
 @RequiredArgsConstructor
@@ -23,50 +24,57 @@ import me.shinsunyoung.springbootdeveloper.order.dto.PaymentRequestDto;
 public class PaymentService {
 
     private final OrderRepository orderRepository;
-    private final MemberRepositoryV1 memberRepository;
+    private final UserRepository userRepository;
     private final PaymentRepository paymentRepository;
     private final ProductManagementRepository productMgtRepository;
 
     public void processPaymentDone(PaymentRequestDto request) {
 
         Long orderId = request.getOrderId();
-        Long memberId = request.getMemberId();
-        verifyUserIdMatch(memberId); // 로그인 된 사용자와 요청 사용자 비교
+        Long userId = request.getUserId(); // memberId → userId
+        verifyUserIdMatch(userId); // 로그인 된 사용자와 요청 사용자 비교
         Long totalPrice = request.getPrice();
         List<Long> productMgtIdList = request.getInventoryIdList();
 
-        //orders 테이블에서 해당 부분 결제true 처리
         Orders currentOrder = orderRepository.findById(orderId)
                 .orElseThrow(() -> new NoSuchElementException("주문 정보를 찾을 수 없습니다."));
         currentOrder.setPaymentStatus(true);
 
-        // PaymentHistory 테이블에 저장할 Member 객체
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new NoSuchElementException(ResponseMessageConstants.MEMBER_NOT_FOUND));
+        // 사용자 정보
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NoSuchElementException("회원 정보를 찾을 수 없습니다."));
 
-        // PaymentHistory 테이블에 저장할 Orders 객체
         Orders order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new NoSuchElementException("해당 주문서를 찾을 수 없습니다. Id : " + orderId));
 
-        // 주문한 상품들에 대해 각각 결제내역 저장
-        createPaymentHistory(productMgtIdList, order, member, totalPrice);
-
+        createPaymentHistory(productMgtIdList, order, user, totalPrice);
     }
 
-    // 결제내역 테이블 저장하는 메서드
-    private void createPaymentHistory(List<Long> productMgtIdList, Orders order, Member member, Long totalPrice) {
+    private void createPaymentHistory(List<Long> productMgtIdList, Orders order, User user, Long totalPrice) {
         for (Long productMgtId : productMgtIdList) {
 
             ProductManagement productMgt = productMgtRepository.findById(productMgtId)
-                    .orElseThrow(() -> new NoSuchElementException(ResponseMessageConstants.PRODUCT_NOT_FOUND));
+                    .orElseThrow(() -> new NoSuchElementException("상품 정보를 찾을 수 없습니다."));
 
             Product product = productMgt.getProduct();
-            String option = productMgt.getColor().getColor() + ", " + productMgt.getSize().toString(); // 상품옵션 문자열로 저장
+            String option = productMgt.getColor().getColor() + ", " + productMgt.getSize().toString();
 
-            PaymentHistory paymentHistory = new PaymentHistory(member, order, product, product.getProductName(), option, product.getPrice(), totalPrice);
+            PaymentHistory paymentHistory = new PaymentHistory(
+                    user, order, product, product.getName(), option, product.getPrice(), totalPrice
+            );
 
             paymentRepository.save(paymentHistory);
-
         }
+    }
+
+    private void verifyUserIdMatch(Long userId) {
+        if (userId == null) {
+            throw new IllegalArgumentException("사용자 정보가 유효하지 않습니다.");
+        }
+    }
+    public List<PaymentHistoryDto> paymentHistoryList(Long userId) {
+        return paymentRepository.findById(userId).stream()
+                .map(PaymentHistoryDto::new)
+                .toList();
     }
 }

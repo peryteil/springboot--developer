@@ -7,7 +7,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     show-sql: true
     properties:
       hibernate:
@@ -82,3 +82,8 @@ cloud:
 
   stack:
     auto: false
+
+portone:
+  imp:
+    api-key: ${IMP_API_KEY}
+    api-secret: ${IMP_API_SECRET}

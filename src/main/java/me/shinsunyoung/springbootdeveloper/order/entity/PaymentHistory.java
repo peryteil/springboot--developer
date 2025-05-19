@@ -1,9 +1,9 @@
 package me.shinsunyoung.springbootdeveloper.order.entity;
 
-<<<<<<< HEAD
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import me.shinsunyoung.springbootdeveloper.domain.User;
 import me.shinsunyoung.springbootdeveloper.product.entity.Product;
 
 import java.time.LocalDateTime;
@@ -17,56 +17,53 @@ public class PaymentHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "payment_history_id")
-    private Long id; // PK
+    private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "member", nullable = false)
-    private Member member; // 사용자
+    @JoinColumn(name = "user_id", nullable = false) // 🔁 변경됨
+    private User user; // 🔁 Member → User
 
     @ManyToOne
     @JoinColumn(name = "orders", nullable = false)
-    private Orders orders; // 주문 테이블과 다대일 (연관관계 주인은 주문)
+    private Orders orders;
 
     @ManyToOne
     @JoinColumn(name = "product", nullable = false)
-    private Product product; // 상품
+    private Product product;
 
     @Column(name = "product_name")
-    private String productName; // 상품 이름
+    private String productName;
 
     @Column(name = "product_option")
-    private String productOption; // 상품 옵션
+    private String productOption;
 
     @Column(name = "product_price", nullable = false)
-    private Integer price; // 가격
+    private Integer price;
 
     @Column(name = "total_price", nullable = false)
-    private Long totalPrice; // 결제한 총 가격
+    private Long totalPrice;
 
     @Column(name = "paid_at", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private LocalDateTime paidAt; // 결제시각
+    private LocalDateTime paidAt;
 
     @Column(name = "status")
-    private Boolean status = true; // 상태
+    private Boolean status = true;
 
     @Column(name = "review")
-    private Boolean review = false; // 리뷰 작성 여부
+    private Boolean review = false;
 
-    public PaymentHistory(Member member, Orders orders, Product product, String productName, String productOption, Integer price, Long totalPrice) {
-        this.member = member;
+    public PaymentHistory(User user, Orders orders, Product product, String productName, String productOption, Integer price, Long totalPrice) {
+        this.user = user;
         this.orders = orders;
         this.product = product;
         this.productName = productName;
         this.productOption = productOption;
         this.price = price;
         this.totalPrice = totalPrice;
-        this.paidAt =  LocalDateTime.now();
+        this.paidAt = LocalDateTime.now();
     }
 
     public void setReview(Boolean review) {
         this.review = review;
     }
-=======
-public class PaymentHistory {
->>>>>>> 0afc4affaca180f6f4bd38488f3cf703416ceaf1
 }

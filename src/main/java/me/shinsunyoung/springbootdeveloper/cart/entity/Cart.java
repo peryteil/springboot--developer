@@ -4,21 +4,30 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import me.shinsunyoung.springbootdeveloper.domain.User;
+import me.shinsunyoung.springbootdeveloper.order.entity.ProductManagement;
 import me.shinsunyoung.springbootdeveloper.product.entity.Product;
 
 @Entity
 @Getter
 @Setter
 public class Cart {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Integer count;//총갯수
-    private Integer price;//총 가격
+
+    private Integer count; // 총 갯수
+    private Integer price; // 총 가격
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = true)
     private User user;
+
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
+    @ManyToOne
+    @JoinColumn(name = "product_management_id")
+    private ProductManagement productManagement;
+
 }

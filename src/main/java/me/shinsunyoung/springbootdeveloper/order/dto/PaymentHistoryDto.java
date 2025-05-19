@@ -3,6 +3,8 @@ package me.shinsunyoung.springbootdeveloper.order.dto;
 import lombok.Getter;
 import me.shinsunyoung.springbootdeveloper.order.entity.PaymentHistory;
 
+import java.time.LocalDateTime;
+
 @Getter
 public class PaymentHistoryDto {
     private String productName;

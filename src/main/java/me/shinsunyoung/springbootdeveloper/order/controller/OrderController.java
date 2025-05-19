@@ -1,13 +1,19 @@
 package me.shinsunyoung.springbootdeveloper.order.controller;
 
-<<<<<<< HEAD
+
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import me.shinsunyoung.springbootdeveloper.order.dto.OrderDto;
+import me.shinsunyoung.springbootdeveloper.order.dto.OrderResponseDto;
 import me.shinsunyoung.springbootdeveloper.order.entity.Orders;
+import me.shinsunyoung.springbootdeveloper.order.service.OrderService;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.modelmapper.ModelMapper;
 
 import java.util.List;
 import java.util.Map;
@@ -67,13 +73,3 @@ public class OrderController {
     }
 
 }
-=======
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-@RestController
-@RequestMapping("/api/order")
-public class OrderController {
-}
->>>>>>> 0afc4affaca180f6f4bd38488f3cf703416ceaf1

@@ -4,7 +4,8 @@ import lombok.RequiredArgsConstructor;
 import me.shinsunyoung.springbootdeveloper.domain.User;
 import me.shinsunyoung.springbootdeveloper.mypage.dto.MyPageUserDto;
 import me.shinsunyoung.springbootdeveloper.mypage.entity.MyOrder;
-import me.shinsunyoung.springbootdeveloper.mypage.repository.OrderRepository;
+import me.shinsunyoung.springbootdeveloper.order.entity.Orders;
+import me.shinsunyoung.springbootdeveloper.order.repository.OrderRepository;
 import me.shinsunyoung.springbootdeveloper.repository.UserRepository;
 import me.shinsunyoung.springbootdeveloper.review.entity.Review;
 import me.shinsunyoung.springbootdeveloper.review.repository.ReviewRepository;
@@ -37,7 +38,7 @@ public class MyPageService {
                 .build();
     }
 
-    public List<MyOrder> getUserOrders(Long userId) {
+    public List<Orders> getUserOrders(Long userId) {
         return orderRepository.findByUserId(userId);
     }
 

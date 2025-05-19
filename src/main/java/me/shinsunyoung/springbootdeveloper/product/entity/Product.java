@@ -6,7 +6,7 @@ import lombok.Setter;
 import me.shinsunyoung.springbootdeveloper.brand.entity.Brand;
 import me.shinsunyoung.springbootdeveloper.cart.entity.Cart;
 import me.shinsunyoung.springbootdeveloper.config.s3.Image;
-import me.shinsunyoung.springbootdeveloper.orderdetail.entity.OrderDetail;
+import me.shinsunyoung.springbootdeveloper.order.entity.OrderDetail;
 import me.shinsunyoung.springbootdeveloper.review.entity.Review;
 
 import java.time.LocalDateTime;
@@ -20,6 +20,7 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String name;
     private String title;
     private Integer price;
     private String materials;//재료

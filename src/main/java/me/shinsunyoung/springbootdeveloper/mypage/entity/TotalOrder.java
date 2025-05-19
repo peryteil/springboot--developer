@@ -3,7 +3,6 @@ package me.shinsunyoung.springbootdeveloper.mypage.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import software.amazon.awssdk.services.s3.endpoints.internal.Value;
 
 import java.util.Date;
 import java.util.List;
@@ -40,5 +39,5 @@ public class TotalOrder {
     // 연관 관계 매핑 (1:N)
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private List<OrderDetail> orderDetails;
+    private List<MyOrderDetail> myOrderDetails;
 }

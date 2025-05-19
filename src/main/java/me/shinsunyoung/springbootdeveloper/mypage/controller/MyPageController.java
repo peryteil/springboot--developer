@@ -3,9 +3,10 @@ package me.shinsunyoung.springbootdeveloper.mypage.controller;
 import lombok.RequiredArgsConstructor;
 import me.shinsunyoung.springbootdeveloper.config.jwt.TokenProvider;
 import me.shinsunyoung.springbootdeveloper.domain.User;
+import me.shinsunyoung.springbootdeveloper.mypage.dto.MyOrderDto;
 import me.shinsunyoung.springbootdeveloper.mypage.dto.MyPageUserDto;
-import me.shinsunyoung.springbootdeveloper.mypage.entity.MyOrder;
 import me.shinsunyoung.springbootdeveloper.mypage.service.MyPageService;
+import me.shinsunyoung.springbootdeveloper.order.entity.Orders;
 import me.shinsunyoung.springbootdeveloper.review.entity.Review;
 import me.shinsunyoung.springbootdeveloper.service.UserService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,10 +40,18 @@ public class MyPageController {
     }
 
     @GetMapping("/orders")
-    public List<MyOrder> getOrders(@RequestHeader("Authorization") String authHeader) {
+    public List<MyOrderDto> getOrders(@RequestHeader("Authorization") String authHeader) {
         Long userId = tokenProvider.getUserId(extractToken(authHeader));
-        return myPageService.getUserOrders(userId);
+        List<Orders> orders = myPageService.getUserOrders(userId);
 
+        return orders.stream()
+                .map(order -> new MyOrderDto(
+                        order.getOrderId(),
+                        order.getProductName(),
+                        order.getTotalPrice(),
+                        order.getOrderDay()
+                ))
+                .toList();
     }
 
     @GetMapping("/reviews")
