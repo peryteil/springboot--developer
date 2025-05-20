@@ -3,12 +3,13 @@ package me.shinsunyoung.springbootdeveloper.order.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import me.shinsunyoung.springbootdeveloper.domain.User;
+import me.shinsunyoung.springbootdeveloper.product.entity.Product;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "orers")
+@Table(name = "orders")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -30,4 +31,8 @@ public class Orders {
     private String status;
 
     private LocalDateTime orderedAt;
+    @ManyToOne
+    @JoinColumn(name = "product_id") // 실제 DB 컬럼명에 따라 변경
+    private Product product;
+
 }

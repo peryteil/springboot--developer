@@ -15,7 +15,7 @@ public class MyPageOrderService {
     private final OrdersRepository ordersRepository;
 
     public List<MyOrderDto> getOrdersForUser(Long userId) {
-        return ordersRepository.findByUserId(userId)
+        return ordersRepository.findByUser_Id(userId)
                 .stream()
                 .map(orders -> MyOrderDto.builder()
                         .productName(orders.getProductName())

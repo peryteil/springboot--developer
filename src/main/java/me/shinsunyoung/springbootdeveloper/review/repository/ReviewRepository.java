@@ -12,5 +12,5 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     List<Review> findTop5ByOrderByCreatedAtDesc();
 
     long countByUserId(Long userId); // ✅ 사용 중인 메서드
-    List<Review> findByUserId(Long userId); // ✅ 추가해줘야 할 메서드
+    List<Review> findByUser_Id(Long userId); // ✅ 추가해줘야 할 메서드
 }

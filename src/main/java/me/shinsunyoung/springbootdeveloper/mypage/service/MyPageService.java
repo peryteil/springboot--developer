@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import me.shinsunyoung.springbootdeveloper.domain.User;
 import me.shinsunyoung.springbootdeveloper.mypage.dto.MyPageUserDto;
 import me.shinsunyoung.springbootdeveloper.mypage.repository.MyPageRepository;
+import me.shinsunyoung.springbootdeveloper.order.entity.Orders;
 import me.shinsunyoung.springbootdeveloper.repository.UserRepository;
 import me.shinsunyoung.springbootdeveloper.review.entity.Review;
 import me.shinsunyoung.springbootdeveloper.review.repository.ReviewRepository;
@@ -31,17 +32,17 @@ public class MyPageService {
                 .nickname(user.getNickname())
                 .membership(user.getMembership())
                 .role(user.getRole())
-                .totalOrders(myPageRepository.countByUserId(userId))
+                .totalOrder(myPageRepository.countByUser_Id(userId))
                 .totalReviews(reviewRepository.countByUserId(userId))
                 .totalLikes(0L)  // 좋아요 수는 추후 구현 시 변경 가능
                 .build();
     }
 
-    public List<Order> getUserOrders(Long userId) {
-        return myPageRepository.findBy(userId);
-    }
-
-    public List<Review> getUserReviews(Long userId) {
-        return reviewRepository.findByUserId(userId);
-    }
+//    public List<Orders> getUserOrders(Long userId) {
+//        return myPageRepository.findById(userId).orElse(null);
+//    }
+//
+//    public List<Review> getUserReviews(Long userId) {
+//        return reviewRepository.findByUserId(userId);
+//    }
 }

@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 import me.shinsunyoung.springbootdeveloper.cart.entity.Cart;
 import me.shinsunyoung.springbootdeveloper.dealcomment.entity.DealComment;
 import me.shinsunyoung.springbootdeveloper.hotdeal.entity.HotDeal;
+import me.shinsunyoung.springbootdeveloper.order.entity.Orders;
 import me.shinsunyoung.springbootdeveloper.review.entity.Review;
-import org.hibernate.query.Order;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -49,6 +49,10 @@ public class User implements UserDetails {
     private String membership;
     private String role;
     private String phone;
+    private Long totalOrder;
+    private Long totalReviews;
+    private Long totalLikes;
+
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Review> reviews = new ArrayList<>();
@@ -60,10 +64,10 @@ public class User implements UserDetails {
     private List<Cart> carts = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Order> orders = new ArrayList<>();
+    private List<Orders> orders = new ArrayList<>();
 
     @Builder
-    public User(String email, String password, String nickname, String provider, String providerId, String name, String membership, String role) {
+    public User(String email, String password, String nickname, String provider, String providerId, String name, String membership, String role, Long totalOrder, Long totalReviews,Long totalLikes) {
 
         this.email = email;
         this.password = password;
@@ -72,6 +76,9 @@ public class User implements UserDetails {
         this.providerId = providerId;
         this.name = name;
         this.membership = membership;
+        this.totalOrder = totalOrder;
+        this.totalReviews = totalReviews;
+        this.totalLikes = totalLikes;
         this.role = (role != null) ? role : "USER";
     }
 

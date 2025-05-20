@@ -16,6 +16,7 @@ public class CustomUserDetails extends org.springframework.security.core.userdet
         this.membership = membership;
     }
 
+
     public Long getUserId() { return userId; }
     public String getNickname() { return nickname; }
     public String getMembership() { return membership; }

@@ -1,12 +1,12 @@
 package me.shinsunyoung.springbootdeveloper.review.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import me.shinsunyoung.springbootdeveloper.review.entity.Review;
 
 import java.time.LocalDateTime;
 
+@Getter
+@Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,7 +18,6 @@ public class ReviewDto {
     private Integer likeCount;
     private Integer viewCount;
     private Integer rating;
-
 
     public ReviewDto(Review review) {
         this.id = review.getId();
@@ -40,5 +39,10 @@ public class ReviewDto {
         dto.updatedAt = review.getUpdatedAt();
         dto.likeCount = review.getLikeCount();
         return dto;
+    }
+
+    // ✅ 컨트롤러에서 사용하는 메서드 이름과 맞춰줌
+    public static ReviewDto from(Review review) {
+        return fromEntity(review); // 기존 메서드 재사용
     }
 }
