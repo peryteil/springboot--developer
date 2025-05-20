@@ -31,7 +31,7 @@ public class ProductService {
         this.brandRepository = brandRepository;
     }
     @Transactional
-    public void save(ProductDto dto, List<MultipartFile> files) {
+    public void save(Long brandId, ProductDto dto, List<MultipartFile> files) {
         Product product = new Product();
         product.setTitle(dto.getTitle());
         product.setContent(dto.getContent());
@@ -44,29 +44,10 @@ public class ProductService {
         product.setStock(dto.getStock());
         product.setCreatedAt(LocalDateTime.now());
 
-        // ✅ 브랜드 처리
-        if (dto.getBrand() != null && !dto.getBrand().isBlank()) {
-            String brandTitle = dto.getBrand().trim();
-            Brand brand = brandRepository.findByTitle(brandTitle);
-            if (brand == null) {
-                brand = new Brand();
-                brand.setTitle(brandTitle);
-                brand.setCreatedAt(LocalDateTime.now());
-
-                // 기본값 설정
-                brand.setFounded(0);
-                brand.setContent("내용 없음");
-                brand.setOffice("미정");
-                brand.setCountry("미정");
-                brand.setRepresentative("미정");
-                brand.setWebSite("미정");
-                brand.setIntroduction("소개 없음");
-                brand.setHistory("히스토리 없음");
-
-                brandRepository.save(brand);
-            }
-            product.setBrand(brand);
-        }
+        // ✅ brandId로 브랜드 엔티티 조회
+        Brand brand = brandRepository.findById(brandId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 브랜드가 존재하지 않습니다. ID: " + brandId));
+        product.setBrand(brand);
 
         // ✅ 이미지 처리
         if (files != null && !files.isEmpty()) {
@@ -83,6 +64,7 @@ public class ProductService {
 
         productRepository.save(product);
     }
+
     @Transactional(readOnly = true)
     public List<ProductFindAll> findAllProduct() {
         return productRepository.findAll().stream().map(ProductFindAll::new).toList();
@@ -162,4 +144,10 @@ public class ProductService {
         List<Product> products = productRepository.findTopP5ProductsByReviewCount(PageRequest.of(0, 5));
         return products.stream().map(ProductRelate::fromEntity).toList();
     }
+
+    public List<ProductDto> findByTitleContainingIgnoreCase(String keyword) {
+        List<Product> products = productRepository.findByTitleContainingIgnoreCase(keyword);
+        return products.stream().map(x -> ProductDto.fromEntity(x)).toList();
+    }
+
 }

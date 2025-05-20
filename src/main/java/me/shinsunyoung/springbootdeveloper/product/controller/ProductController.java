@@ -3,6 +3,7 @@ package me.shinsunyoung.springbootdeveloper.product.controller;
 import me.shinsunyoung.springbootdeveloper.brand.entity.Brand;
 import me.shinsunyoung.springbootdeveloper.brand.repository.BrandRepository;
 import me.shinsunyoung.springbootdeveloper.product.dto.*;
+import me.shinsunyoung.springbootdeveloper.product.entity.Product;
 import me.shinsunyoung.springbootdeveloper.product.service.ProductService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,12 @@ public class ProductController {
         this.productService = productService;
         this.brandRepository = brandRepository;
     }
+    @GetMapping("/findPycharm")
+    public List<ProductDto> searchProducts(@RequestParam String keyword) {
+        return productService.findByTitleContainingIgnoreCase(keyword);
+    }
+
+
     @GetMapping("/brands")
     public ResponseEntity<List<String>> getBrandTitles() {
         List<String> brandTitles = brandRepository.findAll()
@@ -33,12 +40,13 @@ public class ProductController {
         return ResponseEntity.ok(brandTitles);
     }
 
-    @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/create/{brandId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> createProduct(
+            @PathVariable("brandId")Long brandId,
             @RequestPart("dto") ProductDto dto,
             @RequestPart(value = "files", required = false) List<MultipartFile> files
     ) {
-        productService.save(dto, files);
+        productService.save(brandId,dto, files);
         return ResponseEntity.ok().build();
     }
 

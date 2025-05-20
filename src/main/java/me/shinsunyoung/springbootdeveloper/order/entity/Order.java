@@ -7,6 +7,7 @@ import me.shinsunyoung.springbootdeveloper.domain.User;
 import me.shinsunyoung.springbootdeveloper.orderdetail.entity.OrderDetail;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -21,7 +22,7 @@ public class Order {
     private User user;
     private LocalDateTime createdAt;
     private Integer totalPrice;
-    @OneToMany(mappedBy = "order" ,cascade = CascadeType.ALL,orphanRemoval = true)
-    private List<OrderDetail>
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderDetail> orderDetails = new ArrayList<>();
 
 }

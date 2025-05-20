@@ -25,4 +25,6 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
     List<Product> findTopProductsByReviewCount(PageRequest pageable);
     @Query("SELECT p FROM Product p LEFT JOIN p.reviews r GROUP BY p.id ORDER BY COUNT(r) DESC")
     List<Product> findTopP5ProductsByReviewCount(PageRequest pageable);
+
+    List<Product> findByTitleContainingIgnoreCase(String keyword);
 }

@@ -2,6 +2,7 @@ package me.shinsunyoung.springbootdeveloper.brand.service;
 
 import me.shinsunyoung.springbootdeveloper.brand.dto.BrandMain;
 import me.shinsunyoung.springbootdeveloper.brand.dto.BrandResDto;
+import me.shinsunyoung.springbootdeveloper.brand.dto.BrandTitle;
 import me.shinsunyoung.springbootdeveloper.brand.entity.Brand;
 import me.shinsunyoung.springbootdeveloper.brand.repository.BrandRepository;
 import me.shinsunyoung.springbootdeveloper.config.s3.Image;
@@ -107,5 +108,10 @@ public class BrandService {
     public List<BrandMain> findMaun() {
         List<Brand> brands = repository.findRandom3Brands();
         return brands.stream().map(BrandMain::fromEntity).toList();
+    }
+
+    public List<BrandTitle> findAllTitle() {
+        List<Brand> brands = repository.findAll();
+        return brands.stream().map(x -> BrandTitle.fromEntity(x)).toList();
     }
 }

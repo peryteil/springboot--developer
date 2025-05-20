@@ -6,7 +6,7 @@ import lombok.Setter;
 import me.shinsunyoung.springbootdeveloper.order.entity.Order;
 import me.shinsunyoung.springbootdeveloper.product.entity.Product;
 
-@Entity
+@Entity(name = "OrderDetailMain")
 @Getter
 @Setter
 public class OrderDetail {

@@ -2,6 +2,7 @@ package me.shinsunyoung.springbootdeveloper.brand.controller;
 
 import me.shinsunyoung.springbootdeveloper.brand.dto.BrandMain;
 import me.shinsunyoung.springbootdeveloper.brand.dto.BrandResDto;
+import me.shinsunyoung.springbootdeveloper.brand.dto.BrandTitle;
 import me.shinsunyoung.springbootdeveloper.brand.service.BrandService;
 import me.shinsunyoung.springbootdeveloper.product.dto.ProductFindAll;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,12 @@ public class BrandController {
     ) {
         brandService.saveBrand(dto, files);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/findTitle")
+    public ResponseEntity<List<BrandTitle>> findBrandTitle() {
+        List<BrandTitle> brandTitles = brandService.findAllTitle();
+        return ResponseEntity.ok().body(brandTitles);
     }
     @GetMapping("/findAllList")
     public ResponseEntity<List<BrandResDto>> findAllListBrand() {
