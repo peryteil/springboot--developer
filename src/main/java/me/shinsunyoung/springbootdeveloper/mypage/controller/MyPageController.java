@@ -1,57 +1,46 @@
 package me.shinsunyoung.springbootdeveloper.mypage.controller;
 
 import lombok.RequiredArgsConstructor;
-import me.shinsunyoung.springbootdeveloper.config.jwt.TokenProvider;
-import me.shinsunyoung.springbootdeveloper.domain.User;
 import me.shinsunyoung.springbootdeveloper.mypage.dto.MyPageUserDto;
-import me.shinsunyoung.springbootdeveloper.mypage.entity.MyOrder;
-import me.shinsunyoung.springbootdeveloper.mypage.service.MyPageService;
-import me.shinsunyoung.springbootdeveloper.review.entity.Review;
-import me.shinsunyoung.springbootdeveloper.service.UserService;
+import me.shinsunyoung.springbootdeveloper.repository.UserRepository;
+import me.shinsunyoung.springbootdeveloper.review.repository.ReviewRepository;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/mypage")
 @RequiredArgsConstructor
 public class MyPageController {
-    private final MyPageService myPageService;
-    private final TokenProvider tokenProvider;
-    private final UserService userService;
 
-    @GetMapping("/user")
-    public MyPageUserDto getUser(@RequestHeader("Authorization") String authHeader) {
-        Long userId = tokenProvider.getUserId(extractToken(authHeader));
-        User user = userService.findById(userId); // ✅ 이메일 로그인 사용자도 정보 가져오도록 보장
+    private final UserRepository userRepository;
+    private final OrderRepository orderRepository;
+    private final ReviewRepository reviewRepository;
 
-        return MyPageUserDto.builder()
-                .id(user.getId())
-                .name(user.getName())
-                .email(user.getEmail())
-                .nickname(user.getNickname())
-                .membership(user.getMembership())
-                .role(user.getRole())
-                .build();
+    @GetMapping("/{userId}/info")
+    public MyPageUserDto getUserInfo(@PathVariable Long userId) {
+        return userRepository.findById(userId)
+                .map(MyPageUserDto::from)
+                .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
     }
 
-    @GetMapping("/orders")
-    public List<MyOrder> getOrders(@RequestHeader("Authorization") String authHeader) {
-        Long userId = tokenProvider.getUserId(extractToken(authHeader));
-        return myPageService.getUserOrders(userId);
-
+    @GetMapping("/{userId}/orders")
+    public List<OrderSummaryDto> getUserOrders(@PathVariable Long userId) {
+        return orderRepository.findByUserId(userId)
+                .stream()
+                .map(OrderSummaryDto::from)
+                .toList();
     }
 
-    @GetMapping("/reviews")
-    public List<Review> getReviews(@RequestHeader("Authorization") String authHeader) {
-        Long userId = tokenProvider.getUserId(extractToken(authHeader));
-        return myPageService.getUserReviews(userId);
-    }
-
-    private String extractToken(String header) {
-        return header.replace("Bearer ", "");
+    @GetMapping("/{userId}/reviews")
+    public List<ReviewDto> getUserReviews(@PathVariable Long userId) {
+        return reviewRepository.findByUserId(userId)
+                .stream()
+                .map(ReviewDto::from)
+                .toList();
     }
 }

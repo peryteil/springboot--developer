@@ -82,3 +82,8 @@ cloud:
 
   stack:
     auto: false
+
+portone:
+  imp:
+    api-key: ${IMP_API_KEY}
+    api-secret: ${IMP_API_SECRET}

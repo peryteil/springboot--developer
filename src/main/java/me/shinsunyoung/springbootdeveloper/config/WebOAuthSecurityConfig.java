@@ -163,4 +163,8 @@ public class WebOAuthSecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
+    @Bean
+    public org.modelmapper.ModelMapper modelMapper() {
+        return new org.modelmapper.ModelMapper();
+    }
 }

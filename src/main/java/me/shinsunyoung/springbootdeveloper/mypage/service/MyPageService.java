@@ -3,11 +3,11 @@ package me.shinsunyoung.springbootdeveloper.mypage.service;
 import lombok.RequiredArgsConstructor;
 import me.shinsunyoung.springbootdeveloper.domain.User;
 import me.shinsunyoung.springbootdeveloper.mypage.dto.MyPageUserDto;
-import me.shinsunyoung.springbootdeveloper.mypage.entity.MyOrder;
-import me.shinsunyoung.springbootdeveloper.mypage.repository.OrderRepository;
+import me.shinsunyoung.springbootdeveloper.mypage.repository.MyPageRepository;
 import me.shinsunyoung.springbootdeveloper.repository.UserRepository;
 import me.shinsunyoung.springbootdeveloper.review.entity.Review;
 import me.shinsunyoung.springbootdeveloper.review.repository.ReviewRepository;
+import org.hibernate.query.Order;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MyPageService {
     private final UserRepository userRepository;
-    private final OrderRepository orderRepository;
+    private final MyPageRepository myPageRepository;
     private final ReviewRepository reviewRepository;
 
     public MyPageUserDto getUserInfoById(Long userId) {
@@ -31,14 +31,14 @@ public class MyPageService {
                 .nickname(user.getNickname())
                 .membership(user.getMembership())
                 .role(user.getRole())
-                .totalOrders(orderRepository.countByUserId(userId))
+                .totalOrders(myPageRepository.countByUserId(userId))
                 .totalReviews(reviewRepository.countByUserId(userId))
                 .totalLikes(0L)  // 좋아요 수는 추후 구현 시 변경 가능
                 .build();
     }
 
-    public List<MyOrder> getUserOrders(Long userId) {
-        return orderRepository.findByUserId(userId);
+    public List<Order> getUserOrders(Long userId) {
+        return myPageRepository.findBy(userId);
     }
 
     public List<Review> getUserReviews(Long userId) {
