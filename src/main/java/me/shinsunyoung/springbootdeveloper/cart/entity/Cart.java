@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import me.shinsunyoung.springbootdeveloper.domain.User;
-import me.shinsunyoung.springbootdeveloper.order.entity.ProductManagement;
 import me.shinsunyoung.springbootdeveloper.product.entity.Product;
 
 @Entity
@@ -26,8 +25,4 @@ public class Cart {
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
-    @ManyToOne
-    @JoinColumn(name = "product_management_id")
-    private ProductManagement productManagement;
-
 }
