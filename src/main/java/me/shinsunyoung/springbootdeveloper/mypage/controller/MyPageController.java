@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import me.shinsunyoung.springbootdeveloper.mypage.dto.MyPageUserDto;
 import me.shinsunyoung.springbootdeveloper.repository.UserRepository;
 import me.shinsunyoung.springbootdeveloper.review.repository.ReviewRepository;
+import me.shinsunyoung.springbootdeveloper.order.repository.OrdersRepository;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,7 +19,7 @@ import java.util.List;
 public class MyPageController {
 
     private final UserRepository userRepository;
-    private final OrderRepository orderRepository;
+    private final OrdersRepository orderRepository;
     private final ReviewRepository reviewRepository;
 
     @GetMapping("/{userId}/info")

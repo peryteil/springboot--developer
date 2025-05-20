@@ -53,7 +53,5 @@ public class Product {
         }
         images.add(image);
         image.setProduct(this);
-
     }
-
 }
