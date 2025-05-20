@@ -2,8 +2,6 @@ package me.shinsunyoung.springbootdeveloper.mypage.controller;
 
 import lombok.RequiredArgsConstructor;
 import me.shinsunyoung.springbootdeveloper.mypage.dto.MyPageUserDto;
-import me.shinsunyoung.springbootdeveloper.mypage.dto.OrderSummaryDto;
-import me.shinsunyoung.springbootdeveloper.mypage.dto.ReviewDto;
 import me.shinsunyoung.springbootdeveloper.repository.UserRepository;
 import me.shinsunyoung.springbootdeveloper.review.repository.ReviewRepository;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
