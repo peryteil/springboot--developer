@@ -1,22 +1,25 @@
 package me.shinsunyoung.springbootdeveloper.mypage.dto;
 
+import me.shinsunyoung.springbootdeveloper.domain.User;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class MyPageUserDto {
-    private Long id;
     private String name;
     private String email;
     private String nickname;
-    private String membership;
     private String role;
-    private long totalOrders;
-    private long totalReviews;
-    private long totalLikes;
+    private String membership;
+
+    public static MyPageUserDto from(User user) {
+        return new MyPageUserDto(
+                user.getName(),
+                user.getEmail(),
+                user.getNickname(),
+                user.getRole(),
+                user.getMembership()
+        );
+    }
 }

@@ -2,6 +2,7 @@ package me.shinsunyoung.springbootdeveloper.review.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import me.shinsunyoung.springbootdeveloper.domain.User;
 import me.shinsunyoung.springbootdeveloper.product.entity.Product;
@@ -11,10 +12,12 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String productName;
     private String content;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
