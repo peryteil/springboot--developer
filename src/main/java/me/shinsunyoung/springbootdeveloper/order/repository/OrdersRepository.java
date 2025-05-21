@@ -1,12 +1,13 @@
 package me.shinsunyoung.springbootdeveloper.order.repository;
 
 import me.shinsunyoung.springbootdeveloper.order.entity.Orders;
+import me.shinsunyoung.springbootdeveloper.order.entity.ProductOrder;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface OrdersRepository extends JpaRepository<Orders, Long> {
-    List<Orders> findByUser_Id(Long userId);
+public interface OrdersRepository extends JpaRepository<ProductOrder, Long> {
+    List<ProductOrder> findByUser_Id(Long userId);
     // 추가: 사용자 이메일 기반 주문 조회
     List<Orders> findByUser_Email(String email);
 

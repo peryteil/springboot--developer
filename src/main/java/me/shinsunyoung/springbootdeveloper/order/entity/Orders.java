@@ -30,7 +30,7 @@ public class Orders {
 
     private String status;
 
-    private LocalDateTime orderedAt;
+    private LocalDateTime orderedDate;
     @ManyToOne
     @JoinColumn(name = "product_id") // 실제 DB 컬럼명에 따라 변경
     private Product product;

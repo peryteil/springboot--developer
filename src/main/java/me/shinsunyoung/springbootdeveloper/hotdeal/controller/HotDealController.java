@@ -17,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @RestController
-@RequestMapping("/hotDeal")
+@RequestMapping("/api/hotDeal")
 public class HotDealController {
     private final HotDealService hotDealService;
     private final UserRepository userRepository;

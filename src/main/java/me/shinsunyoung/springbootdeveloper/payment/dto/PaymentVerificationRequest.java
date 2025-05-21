@@ -1,27 +1,20 @@
 package me.shinsunyoung.springbootdeveloper.payment.dto;
 
 import lombok.Getter;
+import lombok.Setter;
+import me.shinsunyoung.springbootdeveloper.order.dto.CartItemDto;
 
 import java.util.List;
 
 @Getter
+@Setter
 public class PaymentVerificationRequest {
     private String imp_uid;
     private String merchant_uid;
     private int amount;
+    private String name;
+    private String tel;
+    private String addr;
+    private String postcode;
     private List<CartItemDto> cartItems;
-
-    @Getter
-    public static class CartItemDto {
-        private Long id;
-        private int count;
-        private ProductDto productDto;
-
-        @Getter
-        public static class ProductDto {
-            private Long id;
-            private String title;
-            private int price;
-        }
-    }
 }
