@@ -16,6 +16,5 @@ public class AdminOrderDto {
     private String productName;
     private BigDecimal totalPrice;
     private String status;
-    private String orderedAt; // LocalDateTime이 아니라면 문자열로 처리
     private LocalDateTime orderedDate;
 }

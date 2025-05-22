@@ -28,7 +28,7 @@ public class AdminOrderService {
                         )
                         .totalPrice(order.getTotalAmount())
                         .status("결제완료") // 실제 필드 있으면 getStatus()로
-                        .orderedAt(null) // orderAt 필드 추가 시 수정
+                        .orderedDate(null) // orderAt 필드 추가 시 수정
                         .build())
                 .collect(Collectors.toList());
     }

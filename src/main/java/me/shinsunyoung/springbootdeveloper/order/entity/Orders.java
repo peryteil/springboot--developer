@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import me.shinsunyoung.springbootdeveloper.domain.User;
 import me.shinsunyoung.springbootdeveloper.product.entity.Product;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -18,6 +19,7 @@ import java.time.LocalDateTime;
 public class Orders {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JoinColumn(name = "orders_id")
     private Long orderId;
 
     @ManyToOne
@@ -29,8 +31,9 @@ public class Orders {
     private BigDecimal totalPrice;
 
     private String status;
-
-    private LocalDateTime orderedDate;
+    @CreationTimestamp
+    @Column(name = "ordered_at", updatable = false)
+    private LocalDateTime orderedAt;
     @ManyToOne
     @JoinColumn(name = "product_id") // 실제 DB 컬럼명에 따라 변경
     private Product product;

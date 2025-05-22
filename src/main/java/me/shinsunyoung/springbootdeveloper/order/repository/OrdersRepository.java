@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface OrdersRepository extends JpaRepository<ProductOrder, Long> {
     List<ProductOrder> findByUser_Id(Long userId);
+
     // 추가: 사용자 이메일 기반 주문 조회
     List<Orders> findByUser_Email(String email);
 

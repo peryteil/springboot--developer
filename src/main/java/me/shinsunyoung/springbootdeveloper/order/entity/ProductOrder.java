@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import me.shinsunyoung.springbootdeveloper.domain.User;
 import me.shinsunyoung.springbootdeveloper.order.entity.OrderItem;
+import me.shinsunyoung.springbootdeveloper.product.entity.Product;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -25,6 +26,14 @@ public class ProductOrder {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "orders_id")
+    private Orders orders;
+
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
 
     private String buyerName;
     private String buyerEmail;
