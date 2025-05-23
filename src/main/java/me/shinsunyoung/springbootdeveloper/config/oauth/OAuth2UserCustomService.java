@@ -27,23 +27,23 @@ public class OAuth2UserCustomService extends DefaultOAuth2UserService {
         Map<String, Object> attributes = oAuth2User.getAttributes();
 
         String email = null;
-        String name = null;
+        String nickname = null;
         String providerId = null;
 
         if ("naver".equals(registrationId)) {
             Map<String, Object> response = (Map<String, Object>) attributes.get("response");
             email = (String) response.get("email");
-            name = (String) response.get("name");
+            nickname = (String) response.get("nickname");
             providerId = (String) response.get("id");
         } else if ("kakao".equals(registrationId)) {
             Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
             Map<String, Object> profile = (Map<String, Object>) kakaoAccount.get("profile");
             email = (String) kakaoAccount.get("email");
-            name = (String) profile.get("nickname");
+            nickname = (String) profile.get("nickname");
             providerId = attributes.get("id").toString();
         } else {
             email = (String) attributes.get("email");
-            name = (String) attributes.get("name");
+            nickname = (String) attributes.get("nickname");
             providerId = attributes.get("sub").toString();
         }
 
@@ -56,7 +56,7 @@ public class OAuth2UserCustomService extends DefaultOAuth2UserService {
             String encodedPassword = passwordEncoder.encode("oauth2user-default-password"); // 더미 비밀번호 암호화
             user = User.builder()
                     .email(email)
-                    .nickname(name)
+                    .nickname(nickname)
                     .password(encodedPassword) // 암호화된 비밀번호 저장
                     .provider(registrationId)
                     .providerId(providerId)

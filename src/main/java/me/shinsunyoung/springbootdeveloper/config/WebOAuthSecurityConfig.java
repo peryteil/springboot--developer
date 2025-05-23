@@ -47,7 +47,7 @@ public class WebOAuthSecurityConfig {
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
                         .allowedOrigins("http://localhost:3000")
-                        .allowedMethods("GET", "POST","PATCH", "PUT", "DELETE", "OPTIONS")
+                        .allowedMethods("GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);
             }
@@ -67,7 +67,14 @@ public class WebOAuthSecurityConfig {
                 .requestMatchers(
                         new AntPathRequestMatcher("/img/**"),
                         new AntPathRequestMatcher("/css/**"),
-                        new AntPathRequestMatcher("/js/**")
+                        new AntPathRequestMatcher("/js/**"),
+                        new AntPathRequestMatcher("/static/favicon.ico"),
+                        new AntPathRequestMatcher("/static/**"),
+                        new AntPathRequestMatcher("/**/*.js"),
+                        new AntPathRequestMatcher("/**/*.css"),
+                        new AntPathRequestMatcher("/**/*.png"),
+                        new AntPathRequestMatcher("/**/*.jpg"),
+                        new AntPathRequestMatcher("/**/*.woff2")
                 );
     }
 
@@ -93,19 +100,25 @@ public class WebOAuthSecurityConfig {
                 .addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/favicon.ico",
+                                "/static/favicon.ico",
                                 "/img/**",
                                 "/css/**",
                                 "/js/**",
+                                "/static/**",
                                 "/.well-known/**",
                                 "/h2-console/**",
                                 "/api/token",
-                                "/api/**",
                                 "/hotDeal/**",
                                 "/update",
                                 "/brand/**",
                                 "/review/**",
-                                "/comment/**"
+                                "/comment/**",
+                                "/",                  // React 루트
+                                "/static/index.html",        // React 진입점
+                                "/about",             // React 라우트 예시
+                                "/product",
+                                "/mypage",
+                                "/**"                 // 나머지 모두 허용
                         ).permitAll()
                         .anyRequest().permitAll()
                 )
@@ -150,7 +163,7 @@ public class WebOAuthSecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(List.of("http://localhost:3000"));
-        config.setAllowedMethods(List.of("GET", "POST","PATCH", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedMethods(List.of("GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
 
@@ -163,6 +176,7 @@ public class WebOAuthSecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
+
     @Bean
     public org.modelmapper.ModelMapper modelMapper() {
         return new org.modelmapper.ModelMapper();
